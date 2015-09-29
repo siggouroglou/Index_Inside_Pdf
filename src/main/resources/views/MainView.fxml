@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gr.indexinsidepdf.controller.MainViewController">
+    <stylesheets>
+        <URL value="@/files/css/softaware_1_0.css" />
+    </stylesheets>
+   <children>
+      <VBox layoutX="10.0" layoutY="10.0" prefHeight="600.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <MenuBar prefHeight="30.0">
+              <menus>
+                <Menu mnemonicParsing="false" text="Αρχειο">
+                  <items>
+                        <MenuItem mnemonicParsing="false" onAction="#fileMenuExportCoverClick" text="Εισαγωγη Εξωφυλλου" />
+                        <MenuItem mnemonicParsing="false" onAction="#fileMenuImportCoverClick" text="Εξαγωγη Εξωφυλλου" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                    <MenuItem mnemonicParsing="false" onAction="#fileMenuExitClick" text="Κλεισιμο" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Επεξεργασια">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#edtiMenuCoverClick" text="Εξωφυλλο" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" onAction="#edtiMenuSettingsClick" text="Ρυθμισεις" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Βοηθεια">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#helpMenuAbout" text="Σχετικα" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <HBox alignment="CENTER_RIGHT" prefHeight="30.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#closeBtnClick" text="Κλεισιμο" />
+               </children>
+               <VBox.margin>
+                  <Insets top="526.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
+      <AnchorPane maxWidth="600.0" prefWidth="600.0" AnchorPane.topAnchor="50.0">
+         <children>
+            <GridPane fx:id="gridPane">
+               <columnConstraints>
+                  <ColumnConstraints fillWidth="false" hgrow="NEVER" maxWidth="600.0" minWidth="0.0" prefWidth="600.0" />
+                  <ColumnConstraints fillWidth="false" hgrow="NEVER" maxWidth="600.0" minWidth="0.0" prefWidth="600.0" />
+                  <ColumnConstraints fillWidth="false" hgrow="NEVER" maxWidth="600.0" minWidth="0.0" prefWidth="600.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="500.0" minHeight="10.0" prefHeight="500.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <VBox prefHeight="500.0" prefWidth="600.0">
+                     <children>
+                        <Label styleClass="title-norm" text="Βημα 1 - Επιλογη Τοποθεσιας" />
+                        <Label styleClass="title-description" text="Επιλεξτε την τοποθεσια του φακελου που επιθυμειτε να χρησιμοποιησετε για την κατασκευη του ευρετηριου." wrapText="true" />
+                        <HBox alignment="BOTTOM_LEFT" spacing="10.0">
+                           <VBox.margin>
+                              <Insets top="50.0" />
+                           </VBox.margin>
+                           <children>
+                              <VBox HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Label text="Τοποθεσια Φακελου" />
+                                    <TextField fx:id="srcLocationTxtField" />
+                                 </children>
+                              </VBox>
+                              <Button mnemonicParsing="false" onAction="#srcLocationSearchClick" text="Αναζητηση" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="30.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#step1NextClick" text="Επομενο &gt;" />
+                           </children>
+                           <VBox.margin>
+                              <Insets top="322.0" />
+                           </VBox.margin>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets left="10.0" right="10.0" />
+                     </padding>
+                  </VBox>
+                  <VBox prefHeight="500.0" prefWidth="600.0" GridPane.columnIndex="1">
+                     <children>
+                        <Label styleClass="title-norm" text="Βημα 2 - Ταξινομηση Ευρετηριου" />
+                        <Label prefHeight="30.0" styleClass="title-description" text="Με χρηση των επιλογων που δινονται εφαρμοστε τη διαταξη ου επιθυμειτε για τα αρχεια του ευρετηριου." wrapText="true" />
+                        <HBox alignment="BOTTOM_LEFT" prefHeight="315.0" spacing="10.0">
+                           <VBox.margin>
+                              <Insets top="50.0" />
+                           </VBox.margin>
+                           <children>
+                              <TreeView fx:id="treeView" HBox.hgrow="ALWAYS" />
+                              <VBox alignment="TOP_CENTER" spacing="10.0">
+                                 <children>
+                                    <Button mnemonicParsing="false" onAction="#step2UpClick" prefWidth="115.0" text="Πανω" />
+                                    <Button mnemonicParsing="false" onAction="#step2DownClick" prefWidth="115.0" text="Κατω" />
+                                    <Button mnemonicParsing="false" onAction="#step2RenameClick" prefWidth="115.0" text="Μετονομασια" />
+                                    <Button mnemonicParsing="false" onAction="#step2RemoveClick" prefWidth="115.0" text="Αφαιρεση" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <HBox spacing="10.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#step2RefreshTreeClick" text="Ανανεωση" />
+                              <Button mnemonicParsing="false" onAction="#step2ExportIndexClick" text="Εξαγωγη" />
+                              <Button mnemonicParsing="false" onAction="#step2ImportIndexClick" text="Εισαγωγη" />
+                              <Button mnemonicParsing="false" onAction="#step2CoverSettingsClick" text="Ρυθμιση Εξωφυλλου" />
+                           </children>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="30.0" spacing="10.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#step2BackClick" text="&lt; Πισω" />
+                              <Button mnemonicParsing="false" onAction="#step2NextClick" text="Επομενο &gt;" />
+                           </children>
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets left="10.0" right="10.0" />
+                     </padding>
+                  </VBox>
+                  <VBox prefHeight="500.0" prefWidth="600.0" GridPane.columnIndex="2">
+                     <children>
+                        <Label styleClass="title-norm" text="Βημα 3 - Κατασκευη Ευρετηριου" />
+                        <Label styleClass="title-description" text="Σε αυτο το βημα ολοκληρωνεται η κατασκευη του ευρετηριου." wrapText="true" />
+                        <ProgressBar fx:id="progressBar" progress="0.0" VBox.vgrow="ALWAYS">
+                           <VBox.margin>
+                              <Insets top="50.0" />
+                           </VBox.margin>
+                        </ProgressBar>
+                        <Label fx:id="step3ProgressLabel" styleClass="title-description" text="20% - Αναγνωρη ρυμισεων.." />
+                        <Label fx:id="step3ResultLabel" styleClass="title-norm" text="Το ευρετηριο ετοιμαζεται">
+                           <VBox.margin>
+                              <Insets top="30.0" />
+                           </VBox.margin>
+                        </Label>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="30.0" spacing="10.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#step3BackClick" text="&lt; Πισω" />
+                              <Button mnemonicParsing="false" onAction="#step3NextClick" text="Επομενο &gt;" />
+                           </children>
+                           <VBox.margin>
+                              <Insets top="297.0" />
+                           </VBox.margin>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets left="10.0" right="10.0" />
+                     </padding>
+                  </VBox>
+               </children>
+            </GridPane>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
