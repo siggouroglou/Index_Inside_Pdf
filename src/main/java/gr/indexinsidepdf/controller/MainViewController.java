@@ -15,9 +15,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeView;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 /**
@@ -153,6 +155,7 @@ public class MainViewController implements Initializable {
         }
         stageNew.setScene(new Scene(root));
 
+        stageNew.getIcons().add(new Image("/files/images/logo.png"));
         stageNew.setTitle("softaware.gr - Εξαγωγή Ευρετηρίου");
         stageNew.show();
     }
@@ -171,13 +174,28 @@ public class MainViewController implements Initializable {
         }
         stageNew.setScene(new Scene(root));
 
+        stageNew.getIcons().add(new Image("/files/images/logo.png"));
         stageNew.setTitle("softaware.gr - Εισαγωγή Ευρετηρίου");
         stageNew.show();
     }
 
     @FXML
     void step2CoverSettingsClick(ActionEvent event) {
+        Stage stageNew = new Stage();
+        stageNew.initModality(Modality.WINDOW_MODAL);
+        stageNew.initOwner(getStage());
 
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/EditCoverView.fxml"));
+        Parent root = null;
+        try {
+            root = (Parent) loader.load();
+        } catch (IOException ignored) {
+        }
+        stageNew.setScene(new Scene(root));
+
+        stageNew.getIcons().add(new Image("/files/images/logo.png"));
+        stageNew.setTitle("softaware.gr - Ρυθμίσεις Εξώφυλλου");
+        stageNew.show();
     }
     //</editor-fold>
 
@@ -196,6 +214,7 @@ public class MainViewController implements Initializable {
         }
         stageNew.setScene(new Scene(root));
 
+        stageNew.getIcons().add(new Image("/files/images/logo.png"));
         stageNew.setTitle("softaware.gr - Εξαγωγή Εξώφυλλου");
         stageNew.show();
     }
@@ -214,6 +233,7 @@ public class MainViewController implements Initializable {
         }
         stageNew.setScene(new Scene(root));
 
+        stageNew.getIcons().add(new Image("/files/images/logo.png"));
         stageNew.setTitle("softaware.gr - Εισαγωγή Εξώφυλλου");
         stageNew.show();
     }
@@ -227,19 +247,62 @@ public class MainViewController implements Initializable {
     //<editor-fold defaultstate="collapsed" desc="Edit Menu">
     @FXML
     void editMenuCoverClick(ActionEvent event) {
+        Stage stageNew = new Stage();
+        stageNew.initModality(Modality.WINDOW_MODAL);
+        stageNew.initOwner(getStage());
 
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/EditCoverView.fxml"));
+        Parent root = null;
+        try {
+            root = (Parent) loader.load();
+        } catch (IOException ignored) {
+        }
+        stageNew.setScene(new Scene(root));
+
+        stageNew.getIcons().add(new Image("/files/images/logo.png"));
+        stageNew.setTitle("softaware.gr - Ρυθμίσεις Εξώφυλλου");
+        stageNew.show();
     }
 
     @FXML
     void editMenuSettingsClick(ActionEvent event) {
+        Stage stageNew = new Stage();
+        stageNew.initModality(Modality.WINDOW_MODAL);
+        stageNew.initOwner(getStage());
 
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/EditSettingsView.fxml"));
+        Parent root = null;
+        try {
+            root = (Parent) loader.load();
+        } catch (IOException ignored) {
+        }
+        stageNew.setScene(new Scene(root));
+
+        stageNew.getIcons().add(new Image("/files/images/logo.png"));
+        stageNew.setTitle("softaware.gr - Ρυθμίσεις");
+        stageNew.show();
     }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Help Menu">
     @FXML
     void helpMenuAbout(ActionEvent event) {
+        Stage stageNew = new Stage();
+        stageNew.initModality(Modality.WINDOW_MODAL);
+        stageNew.initStyle(StageStyle.UNDECORATED);
+        stageNew.initOwner(getStage());
 
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/HelpAboutView.fxml"));
+        Parent root = null;
+        try {
+            root = (Parent) loader.load();
+        } catch (IOException ignored) {
+        }
+        stageNew.setScene(new Scene(root));
+        
+        stageNew.getIcons().add(new Image("/files/images/logo.png"));
+        stageNew.show();
     }
     //</editor-fold>
 

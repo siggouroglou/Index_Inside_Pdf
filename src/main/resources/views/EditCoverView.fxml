@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="gr.indexinsidepdf.controller.EditCoverViewController">
+    <stylesheets>
+        <URL value="@/files/css/softaware_1_0.css" />
+    </stylesheets>
+   <children>
+      <BorderPane layoutX="-42.0" layoutY="63.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label styleClass="title-norm" text="Ρυθμισεις Εξωφυλλου" />
+                  <Label styleClass="title-description" text="Σε αυτο το παραθυρο ρυθμιζετε το περιεχομενο του εξωφυλλου του ευρετηριου." wrapText="true" />
+                  <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+                    <tabs>
+                      <Tab text="Εναρξη / Ληξη">
+                           <content>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <VBox prefHeight="363.0" prefWidth="580.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                          <HBox spacing="10.0">
+                                             <children>
+                                                <VBox HBox.hgrow="ALWAYS">
+                                                   <children>
+                                                      <Label text="Τιτλος Εναρξης" />
+                                                      <TextField fx:id="startTitleTextField" />
+                                                   </children>
+                                                </VBox>
+                                                <VBox HBox.hgrow="ALWAYS">
+                                                   <children>
+                                                      <Label text="Ημ/νια Εναρξης" />
+                                                      <TextField fx:id="startDateTextField" />
+                                                   </children>
+                                                </VBox>
+                                             </children>
+                                          </HBox>
+                                          <HBox spacing="10.0">
+                                             <children>
+                                                <VBox HBox.hgrow="ALWAYS">
+                                                   <children>
+                                                      <Label text="Χρημ. Ποσο" />
+                                                      <TextField fx:id="startAmmountTextField" />
+                                                   </children>
+                                                </VBox>
+                                                <VBox HBox.hgrow="ALWAYS" />
+                                             </children>
+                                          </HBox>
+                                          <HBox spacing="10.0">
+                                             <children>
+                                                <VBox HBox.hgrow="ALWAYS">
+                                                   <children>
+                                                      <Label text="Τιτλος Ληξης" />
+                                                      <TextField fx:id="endTitleTextField" />
+                                                   </children>
+                                                </VBox>
+                                                <VBox HBox.hgrow="ALWAYS" />
+                                             </children>
+                                          </HBox>
+                                          <VBox>
+                                             <children>
+                                                <Label text="Κειμενο Ληξης" />
+                                                <TextArea fx:id="endTextTextArea" prefHeight="200.0" prefWidth="200.0" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                                 <padding>
+                                    <Insets top="10.0" />
+                                 </padding>
+                              </AnchorPane>
+                           </content>
+                        </Tab>
+                      <Tab text="Κορμος">
+                           <content>
+                              <AnchorPane>
+                                 <padding>
+                                    <Insets top="10.0" />
+                                 </padding>
+                                 <children>
+                                    <HBox prefHeight="363.0" prefWidth="580.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                          <VBox HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Button mnemonicParsing="false" onAction="#addBetweenClick" text="+ Προσθηκη 'Between'" />
+                                                <VBox fx:id="betweenContainer">
+                                                   <VBox.margin>
+                                                      <Insets top="5.0" />
+                                                   </VBox.margin>
+                                                </VBox>
+                                             </children>
+                                          </VBox>
+                                          <VBox alignment="TOP_RIGHT" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Button mnemonicParsing="false" onAction="#addLenderClick" text="+ Προσθηκη 'Lender'" />
+                                                <VBox fx:id="lenderContainer">
+                                                   <VBox.margin>
+                                                      <Insets top="5.0" />
+                                                   </VBox.margin>
+                                                </VBox>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </Tab>
+                    </tabs>
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </TabPane>
+               </children>
+               <BorderPane.margin>
+                  <Insets bottom="10.0" />
+               </BorderPane.margin>
+            </VBox>
+         </center>
+         <bottom>
+            <HBox alignment="CENTER_RIGHT" spacing="5.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#cancelClick" text="Κλεισιμο" />
+                  <Button mnemonicParsing="false" onAction="#saveClick" text="Αποθηκευση" />
+               </children>
+            </HBox>
+         </bottom>
+      </BorderPane>
+   </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</AnchorPane>

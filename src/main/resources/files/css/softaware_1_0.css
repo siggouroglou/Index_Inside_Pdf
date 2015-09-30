@@ -33,7 +33,7 @@
 }
 
 .tab{
-    /*-fx-cursor: hand;*/
+    -fx-cursor: hand;
 }
 
 .combo-box{
