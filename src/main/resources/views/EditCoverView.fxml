@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="gr.indexinsidepdf.controller.EditCoverViewController">
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gr.indexinsidepdf.controller.EditCoverViewController">
     <stylesheets>
         <URL value="@/files/css/softaware_1_0.css" />
     </stylesheets>
@@ -38,7 +38,7 @@
                                                 <VBox HBox.hgrow="ALWAYS">
                                                    <children>
                                                       <Label text="Ημ/νια Εναρξης" />
-                                                      <TextField fx:id="startDateTextField" />
+                                                      <TextField fx:id="startDateTextField" promptText="HH.MM.EEEE" />
                                                    </children>
                                                 </VBox>
                                              </children>
@@ -92,7 +92,7 @@
                                           <VBox HBox.hgrow="ALWAYS">
                                              <children>
                                                 <Button mnemonicParsing="false" onAction="#addBetweenClick" text="+ Προσθηκη 'Between'" />
-                                                <VBox fx:id="betweenContainer">
+                                                <VBox fx:id="betweenContainer" spacing="8.0">
                                                    <VBox.margin>
                                                       <Insets top="5.0" />
                                                    </VBox.margin>
@@ -102,7 +102,7 @@
                                           <VBox alignment="TOP_RIGHT" HBox.hgrow="ALWAYS">
                                              <children>
                                                 <Button mnemonicParsing="false" onAction="#addLenderClick" text="+ Προσθηκη 'Lender'" />
-                                                <VBox fx:id="lenderContainer">
+                                                <VBox fx:id="lenderContainer" alignment="TOP_RIGHT" spacing="8.0">
                                                    <VBox.margin>
                                                       <Insets top="5.0" />
                                                    </VBox.margin>

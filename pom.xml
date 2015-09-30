@@ -17,6 +17,21 @@
     <organization>
         <name>softaware.gr</name>
     </organization>
+    <dependencies>
+        <!--BeanUtils-->
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.9.2</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
 
     <build>
         <resources>
@@ -118,5 +133,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
