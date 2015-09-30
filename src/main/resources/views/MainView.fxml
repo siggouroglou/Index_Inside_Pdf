@@ -20,17 +20,17 @@
               <menus>
                 <Menu mnemonicParsing="false" text="Αρχειο">
                   <items>
-                        <MenuItem mnemonicParsing="false" onAction="#fileMenuExportCoverClick" text="Εισαγωγη Εξωφυλλου" />
-                        <MenuItem mnemonicParsing="false" onAction="#fileMenuImportCoverClick" text="Εξαγωγη Εξωφυλλου" />
+                        <MenuItem mnemonicParsing="false" onAction="#fileMenuImportCoverClick" text="Εισαγωγη Εξωφυλλου" />
+                        <MenuItem mnemonicParsing="false" onAction="#fileMenuExportCoverClick" text="Εξαγωγη Εξωφυλλου" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                    <MenuItem mnemonicParsing="false" onAction="#fileMenuExitClick" text="Κλεισιμο" />
+                    <MenuItem mnemonicParsing="false" onAction="#fileMenuExitClick" text="Εξοδος" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Επεξεργασια">
                   <items>
-                    <MenuItem mnemonicParsing="false" onAction="#edtiMenuCoverClick" text="Εξωφυλλο" />
+                    <MenuItem mnemonicParsing="false" onAction="#editMenuCoverClick" text="Εξωφυλλο" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" onAction="#edtiMenuSettingsClick" text="Ρυθμισεις" />
+                        <MenuItem mnemonicParsing="false" onAction="#editMenuSettingsClick" text="Ρυθμισεις" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Βοηθεια">
@@ -159,7 +159,7 @@
                         <HBox alignment="CENTER_RIGHT" prefHeight="30.0" spacing="10.0">
                            <children>
                               <Button mnemonicParsing="false" onAction="#step3BackClick" text="&lt; Πισω" />
-                              <Button mnemonicParsing="false" onAction="#step3NextClick" text="Επομενο &gt;" />
+                              <Button mnemonicParsing="false" onAction="#step3StopClick" text="Τελος" />
                            </children>
                            <VBox.margin>
                               <Insets top="297.0" />

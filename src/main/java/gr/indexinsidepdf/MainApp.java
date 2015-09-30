@@ -18,6 +18,7 @@ public class MainApp extends Application {
         stage.setScene(new Scene(root));
         stage.setWidth(600D);
         
+        stage.setTitle("softaware.gr - Πρόγραμμα κατασκευής ευρετηρίου σε pdf");
         stage.show();
     }
 

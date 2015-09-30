@@ -1,19 +1,23 @@
 package gr.indexinsidepdf.controller;
 
-import static java.awt.SystemColor.text;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.Interpolator;
-import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
@@ -50,25 +54,66 @@ public class MainViewController implements Initializable {
         assert step3ResultLabel != null : "fx:id=\"step3ResultLabel\" was not injected: check your FXML file 'MainView.fxml'.";
 
     }
+    
+    private Stage getStage() {
+        return (Stage) gridPane.getScene().getWindow();
+    }
 
+    //<editor-fold defaultstate="collapsed" desc="Moving to Steps">
+    @FXML
+    void step1NextClick(ActionEvent event) {
+        move(StepDirection.FORWARD);
+    }
+
+    @FXML
+    void step2BackClick(ActionEvent event) {
+        move(StepDirection.BACKWARD);
+    }
+
+    @FXML
+    void step2NextClick(ActionEvent event) {
+        move(StepDirection.FORWARD);
+    }
+
+    @FXML
+    void step3BackClick(ActionEvent event) {
+        move(StepDirection.BACKWARD);
+    }
+
+    @FXML
+    void step3StopClick(ActionEvent event) {
+        getStage().close();
+    }
+
+    private int currentStepOffset = 0;
+    private enum StepDirection {
+
+        FORWARD, BACKWARD
+    };
+
+    private void move(StepDirection stepDirection) {
+        int oldStepOffset = currentStepOffset;
+        currentStepOffset += stepDirection == StepDirection.FORWARD ? -600 : 600;
+        TranslateTransition translateTransition = new TranslateTransition();
+        translateTransition.setNode(gridPane);
+        translateTransition.setFromX(oldStepOffset);
+        translateTransition.setToX(currentStepOffset);
+        translateTransition.setDuration(new Duration(250));
+        translateTransition.setInterpolator(Interpolator.LINEAR);
+        translateTransition.setAutoReverse(false);
+        translateTransition.setCycleCount(1);
+        translateTransition.play();
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Step 1">
     @FXML
     void srcLocationSearchClick(ActionEvent event) {
 
     }
+    //</editor-fold>
 
-    @FXML
-    void step1NextClick(ActionEvent event) {
-        TranslateTransition tt = new TranslateTransition();
-        tt.setNode(gridPane);
-        tt.setFromX(0);
-        tt.setToX(-600);
-        tt.setDuration(new Duration(250));
-        tt.setInterpolator(Interpolator.LINEAR);
-        tt.setAutoReverse(false);
-        tt.setCycleCount(1);
-        tt.play();
-    }
-
+    //<editor-fold defaultstate="collapsed" desc="Step 2">
     @FXML
     void step2UpClick(ActionEvent event) {
 
@@ -96,72 +141,111 @@ public class MainViewController implements Initializable {
 
     @FXML
     void step2ExportIndexClick(ActionEvent event) {
+        Stage stageNew = new Stage();
+        stageNew.initModality(Modality.WINDOW_MODAL);
+        stageNew.initOwner(getStage());
 
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/IndexExportView.fxml"));
+        Parent root = null;
+        try {
+            root = (Parent) loader.load();
+        } catch (IOException ignored) {
+        }
+        stageNew.setScene(new Scene(root));
+
+        stageNew.setTitle("softaware.gr - Εξαγωγή Ευρετηρίου");
+        stageNew.show();
     }
 
     @FXML
     void step2ImportIndexClick(ActionEvent event) {
+        Stage stageNew = new Stage();
+        stageNew.initModality(Modality.WINDOW_MODAL);
+        stageNew.initOwner(getStage());
 
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/IndexImportView.fxml"));
+        Parent root = null;
+        try {
+            root = (Parent) loader.load();
+        } catch (IOException ignored) {
+        }
+        stageNew.setScene(new Scene(root));
+
+        stageNew.setTitle("softaware.gr - Εισαγωγή Ευρετηρίου");
+        stageNew.show();
     }
 
     @FXML
     void step2CoverSettingsClick(ActionEvent event) {
 
     }
+    //</editor-fold>
 
-    @FXML
-    void step2BackClick(ActionEvent event) {
-
-    }
-
-    @FXML
-    void step2NextClick(ActionEvent event) {
-
-    }
-
-    @FXML
-    void step3BackClick(ActionEvent event) {
-
-    }
-
-    @FXML
-    void step3NextClick(ActionEvent event) {
-
-    }
-
+    //<editor-fold defaultstate="collapsed" desc="File Menu">
     @FXML
     void fileMenuExportCoverClick(ActionEvent event) {
+        Stage stageNew = new Stage();
+        stageNew.initModality(Modality.WINDOW_MODAL);
+        stageNew.initOwner(getStage());
 
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/CoverExportView.fxml"));
+        Parent root = null;
+        try {
+            root = (Parent) loader.load();
+        } catch (IOException ignored) {
+        }
+        stageNew.setScene(new Scene(root));
+
+        stageNew.setTitle("softaware.gr - Εξαγωγή Εξώφυλλου");
+        stageNew.show();
     }
 
     @FXML
     void fileMenuImportCoverClick(ActionEvent event) {
+        Stage stageNew = new Stage();
+        stageNew.initModality(Modality.WINDOW_MODAL);
+        stageNew.initOwner(getStage());
 
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/CoverImportView.fxml"));
+        Parent root = null;
+        try {
+            root = (Parent) loader.load();
+        } catch (IOException ignored) {
+        }
+        stageNew.setScene(new Scene(root));
+
+        stageNew.setTitle("softaware.gr - Εισαγωγή Εξώφυλλου");
+        stageNew.show();
     }
 
     @FXML
     void fileMenuExitClick(ActionEvent event) {
+        getStage().close();
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Edit Menu">
+    @FXML
+    void editMenuCoverClick(ActionEvent event) {
 
     }
 
     @FXML
-    void edtiMenuCoverClick(ActionEvent event) {
+    void editMenuSettingsClick(ActionEvent event) {
 
     }
+    //</editor-fold>
 
-    @FXML
-    void edtiMenuSettingsClick(ActionEvent event) {
-
-    }
-
+    //<editor-fold defaultstate="collapsed" desc="Help Menu">
     @FXML
     void helpMenuAbout(ActionEvent event) {
 
     }
+    //</editor-fold>
 
     @FXML
     void closeBtnClick(ActionEvent event) {
-
+        getStage().close();
     }
 
 }
