@@ -18,6 +18,7 @@ public class MainApp extends Application {
         Parent root = (Parent)loader.load();
         stage.setScene(new Scene(root));
         stage.setWidth(600D);
+        stage.setResizable(false);
         
         stage.getIcons().add(new Image("/files/images/logo.png"));
         stage.setTitle("softaware.gr - Πρόγραμμα κατασκευής ευρετηρίου σε pdf");

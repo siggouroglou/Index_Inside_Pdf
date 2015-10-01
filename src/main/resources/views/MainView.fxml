@@ -21,7 +21,7 @@
                 <Menu mnemonicParsing="false" text="Αρχειο">
                   <items>
                         <MenuItem mnemonicParsing="false" onAction="#fileMenuImportCoverClick" text="Εισαγωγη Εξωφυλλου" />
-                        <MenuItem mnemonicParsing="false" onAction="#fileMenuExportCoverClick" text="Εξαγωγη Εξωφυλλου" />
+                        <MenuItem fx:id="fileMenuExportCoverItem" mnemonicParsing="false" onAction="#fileMenuExportCoverClick" text="Εξαγωγη Εξωφυλλου" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                     <MenuItem mnemonicParsing="false" onAction="#fileMenuExitClick" text="Εξοδος" />
                   </items>
@@ -119,7 +119,7 @@
                         <HBox spacing="10.0">
                            <children>
                               <Button mnemonicParsing="false" onAction="#step2RefreshTreeClick" text="Ανανεωση" />
-                              <Button mnemonicParsing="false" onAction="#step2ExportIndexClick" text="Εξαγωγη" />
+                              <Button fx:id="step2ExportIndexButton" mnemonicParsing="false" onAction="#step2ExportIndexClick" text="Εξαγωγη" />
                               <Button mnemonicParsing="false" onAction="#step2ImportIndexClick" text="Εισαγωγη" />
                               <Button mnemonicParsing="false" onAction="#step2CoverSettingsClick" text="Ρυθμιση Εξωφυλλου" />
                            </children>

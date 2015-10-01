@@ -11,15 +11,15 @@ import javafx.beans.property.StringProperty;
  */
 public class CoverModel {
 
-    private final StringProperty startTitle;
+    private final SimpleStringProperty startTitle;
 
 //    @Date(message = "Η ημερομηνία δεν βρίσκεται στην κατάλληλη μορφή.")
-    private final StringProperty startDate;
+    private final SimpleStringProperty startDate;
 
 //    @Decimal(min = 0, message = "Το ποσό δεν είναι αποδεκτός αριθμός.")
-    private final StringProperty startAmmount;
-    private final StringProperty endTitle;
-    private final StringProperty endText;
+    private final SimpleStringProperty startAmmount;
+    private final SimpleStringProperty endTitle;
+    private final SimpleStringProperty endText;
     private List<String> betweenList;
     private List<String> lenderList;
 
@@ -97,8 +97,22 @@ public class CoverModel {
         return betweenList;
     }
 
+    public void setBetweenList(List<String> betweenList) {
+        this.betweenList.clear();
+        betweenList.stream().forEach((curent) -> {
+            this.betweenList.add(curent);
+        });
+    }
+
     public List<String> getLenderList() {
         return lenderList;
+    }
+
+    public void setLenderList(List<String> lenderList) {
+        this.lenderList.clear();
+        lenderList.stream().forEach((curent) -> {
+            this.lenderList.add(curent);
+        });
     }
 
 }

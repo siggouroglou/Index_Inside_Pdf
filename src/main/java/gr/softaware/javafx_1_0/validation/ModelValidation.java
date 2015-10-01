@@ -8,7 +8,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.scene.control.Alert;
 import org.apache.log4j.Logger;
 
 /**
@@ -23,11 +22,30 @@ public class ModelValidation<T> {
     public ModelValidation() {
     }
 
+    /**
+     * Validate the model fields depending their annotations.
+     *
+     * @param model
+     * @return
+     * @throws NullPointerException if argument is null.
+     */
     public List<ValidationError> validate(T model) {
-        List<ValidationError> validationErrors = new ArrayList<>();
-        // Check if there is any validation anotation.
+        // Argument check.
+        if (model == null) {
+            throw new NullPointerException("Model cannot be null");
+        }
 
+        // List to return.
+        List<ValidationError> validationErrors = new ArrayList<>();
+
+        // Check if there is any validation anotation.
         for (Field field : model.getClass().getDeclaredFields()) {
+            // Check if there are any anotations for this field.
+            Annotation[] annotations = field.getAnnotations();
+            if (annotations.length == 0) {
+                continue;
+            }
+
             // Get the field value invoking getter.
             String fieldName = field.getName();
             Object fieldValue;
@@ -41,7 +59,7 @@ public class ModelValidation<T> {
             }
 
             // Check all the anotations specified for this field.
-            for (Annotation annotation : field.getAnnotations()) {
+            for (Annotation annotation : annotations) {
                 try {
                     if (annotation.annotationType() == gr.softaware.javafx_1_0.validation.type.Date.class) {
                         ValidationError error = validateDate(fieldValue, fieldName, annotation);
@@ -67,7 +85,7 @@ public class ModelValidation<T> {
     }
 
     private ValidationError validateDate(Object fieldValue, String fieldName, Annotation annotation) {
-        // Validate annotation arg.
+        // Validate fieldName and annotation arg.
         if (!(annotation instanceof gr.softaware.javafx_1_0.validation.type.Date)) {
             throw new ValidationOperationException("Annotation type not acceptable. Aceptable type: gr.softaware.javafx_1_0.validation.type.Date");
         }

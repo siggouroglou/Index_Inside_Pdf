@@ -5,12 +5,13 @@ import gr.softaware.javafx_1_0.validation.ModelValidation;
 import gr.softaware.javafx_1_0.validation.ValidationError;
 import java.util.List;
 import javafx.scene.control.Alert;
+import javafx.stage.Stage;
 
 /**
  *
  * @author siggouroglou@gmail.com
  */
-public class ValidationHelper {
+public class LibraryHelper {
 
     public static boolean validate(CoverModel model) {
         // Validate.
@@ -29,7 +30,7 @@ public class ValidationHelper {
         }
 
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Προβλημε - Μη αποδεκτές τιμές");
+        alert.setTitle("Προβλημα - Μη αποδεκτές τιμές");
         alert.setHeaderText("Κάποιο(α) πεδίο(α) δεν έχουν αποδεκτές τιμές");
         alert.setContentText(builder.toString());
         alert.show();

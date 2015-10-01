@@ -1,5 +1,6 @@
 package gr.indexinsidepdf.controller;
 
+import gr.indexinsidepdf.lib.storage.IOManager;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -11,7 +12,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeView;
@@ -33,6 +36,10 @@ public class MainViewController implements Initializable {
     private GridPane gridPane;
     @FXML
     private TreeView<?> treeView;
+    @FXML
+    private MenuItem fileMenuExportCoverItem;
+    @FXML
+    private Button step2ExportIndexButton;
 
     @FXML
     private Label step3ProgressLabel;
@@ -50,11 +57,16 @@ public class MainViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         assert gridPane != null : "fx:id=\"gridPane\" was not injected: check your FXML file 'MainView.fxml'.";
         assert treeView != null : "fx:id=\"treeView\" was not injected: check your FXML file 'MainView.fxml'.";
+        assert fileMenuExportCoverItem != null : "fx:id=\"fileMenuExportCoverItem\" was not injected: check your FXML file 'MainView.fxml'.";
+        assert step2ExportIndexButton != null : "fx:id=\"step2ExportIndexButton\" was not injected: check your FXML file 'MainView.fxml'.";
         assert step3ProgressLabel != null : "fx:id=\"step3ProgressLabel\" was not injected: check your FXML file 'MainView.fxml'.";
         assert srcLocationTxtField != null : "fx:id=\"srcLocationTxtField\" was not injected: check your FXML file 'MainView.fxml'.";
         assert progressBar != null : "fx:id=\"progressBar\" was not injected: check your FXML file 'MainView.fxml'.";
         assert step3ResultLabel != null : "fx:id=\"step3ResultLabel\" was not injected: check your FXML file 'MainView.fxml'.";
 
+        // Menu binding.
+        fileMenuExportCoverItem.disableProperty().bind(IOManager.getInstance().coverSavedProperty());
+        step2ExportIndexButton.disableProperty().bind(IOManager.getInstance().indexSaveProperty());
     }
     
     private Stage getStage() {

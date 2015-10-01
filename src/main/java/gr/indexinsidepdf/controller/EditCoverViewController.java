@@ -1,13 +1,11 @@
 package gr.indexinsidepdf.controller;
 
-import gr.indexinsidepdf.lib.ValidationHelper;
+import gr.indexinsidepdf.lib.LibraryHelper;
 import gr.indexinsidepdf.lib.storage.CoverManager;
+import gr.indexinsidepdf.lib.storage.IOManager;
 import gr.indexinsidepdf.model.CoverModel;
-import gr.softaware.javafx_1_0.validation.ModelValidation;
-import gr.softaware.javafx_1_0.validation.ValidationError;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,8 +13,6 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -24,6 +20,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.log4j.Logger;
 
 /**
  * FXML Controller class
@@ -31,6 +28,8 @@ import org.apache.commons.beanutils.BeanUtils;
  * @author siggouroglou
  */
 public class EditCoverViewController implements Initializable {
+
+    private static final Logger logger = Logger.getLogger(EditCoverViewController.class);
 
     private final CoverModel MODEL = new CoverModel();
     @FXML
@@ -83,12 +82,10 @@ public class EditCoverViewController implements Initializable {
         endTextTextArea.textProperty().bindBidirectional(MODEL.endTextProperty());
 
         // Construct the between and lender nodes.
-        coverModel.getBetweenList().stream().forEach((between) -> {
-            MODEL.getBetweenList().add(between);
+        MODEL.getBetweenList().stream().forEach((between) -> {
             addNodeToBody(betweenContainer, between);
         });
-        coverModel.getLenderList().stream().forEach((lender) -> {
-            MODEL.getLenderList().add(lender);
+        MODEL.getLenderList().stream().forEach((lender) -> {
             addNodeToBody(lenderContainer, lender);
         });
     }
@@ -105,6 +102,7 @@ public class EditCoverViewController implements Initializable {
 
     @FXML
     void saveClick(ActionEvent event) {
+        // Update the MODEL lists.
         MODEL.getBetweenList().clear();
         MODEL.getLenderList().clear();
         // Re-construct the model between and lender list.
@@ -130,7 +128,7 @@ public class EditCoverViewController implements Initializable {
         }
 
         // Validate.
-        if (!ValidationHelper.validate(MODEL)) {
+        if (!LibraryHelper.validate(MODEL)) {
             return;
         }
 
@@ -138,17 +136,12 @@ public class EditCoverViewController implements Initializable {
         CoverModel coverModel = CoverManager.getInstance().getCoverModel();
         try {
             BeanUtils.copyProperties(coverModel, MODEL);
-            // Add the lists.
-            coverModel.getBetweenList().clear();
-            MODEL.getBetweenList().stream().forEach((curent) -> {
-                coverModel.getBetweenList().add(curent);
-            });
-            coverModel.getLenderList().clear();
-            MODEL.getLenderList().stream().forEach((curent) -> {
-                coverModel.getLenderList().add(curent);
-            });
         } catch (IllegalAccessException | InvocationTargetException ex) {
+            logger.error("Model didn't copied to saved coverModel", ex);
         }
+        
+        // Change the state of the cover to unsaved.
+        IOManager.getInstance().coverSavedProperty().set(false);
 
         // Close the stage.
         getStage().close();
