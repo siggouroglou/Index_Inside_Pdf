@@ -68,7 +68,7 @@ public class EditCoverViewController implements Initializable {
         assert betweenContainer != null : "fx:id=\"betweenContainer\" was not injected: check your FXML file 'EditCover.fxml'.";
         assert startAmmountTextField != null : "fx:id=\"startAmmountTextField\" was not injected: check your FXML file 'EditCover.fxml'.";
         assert endTextTextArea != null : "fx:id=\"endTextTextArea\" was not injected: check your FXML file 'EditCover.fxml'.";
-
+        
         // Bind properties from CoverModel of the CoverManager singleton instance.
         CoverModel coverModel = CoverManager.getInstance().getCoverModel();
         try {

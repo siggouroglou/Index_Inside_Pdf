@@ -6,7 +6,6 @@ import gr.softaware.javafx_1_0.io.fileSaving.StorageFileManager;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
-import java.util.logging.Level;
 import javafx.beans.property.BooleanProperty;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;

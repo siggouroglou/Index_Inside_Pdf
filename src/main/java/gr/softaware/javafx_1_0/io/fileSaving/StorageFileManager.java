@@ -429,12 +429,12 @@ public class StorageFileManager {
     }
 
     /**
-     * Select a file and put the path to a TextInputControl.
+     * Select a file and put the path to a TextInputControl. Returns the full path or in case of error null.
      *
      * @param stageParent The parent stage of this modal.
      * @param textField a TextInputControl that will get the absolute path as
      * text.
-     * @return
+     * @return the full path or in case of error null.
      */
     public String selectFile(Stage stageParent, TextInputControl textField) {
         // Select the file.
@@ -445,11 +445,6 @@ public class StorageFileManager {
         }
         file = choose.showOpenDialog(stageParent);
         if (file == null || !file.isFile()) {
-//            Alert error = new Alert(Alert.AlertType.ERROR);
-//            error.setTitle(errorTitle);
-//            error.setHeaderText(errorHeader);
-//            error.setContentText(errorText == null ? "File not found" : errorText);
-//            error.show();
             return null;
         }
 
