@@ -75,7 +75,7 @@ public class EditSettingsViewController implements Initializable {
             Alert error = new Alert(Alert.AlertType.ERROR);
             error.setTitle("Πρόβλημα");
             error.setHeaderText(null);
-            error.setContentText("Το αρχείο που δώσατε δεν είναι αποδεκτό.");
+            error.setContentText("Η διαδρομή που δώσατε δεν είναι αποδεκτή.");
             error.show();
             return;
         }

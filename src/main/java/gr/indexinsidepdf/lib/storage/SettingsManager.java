@@ -1,5 +1,7 @@
 package gr.indexinsidepdf.lib.storage;
 
+import gr.indexinsidepdf.model.SettingsModel;
+
 /**
  * Singleton class that will store the current settings.
  *
@@ -8,12 +10,10 @@ package gr.indexinsidepdf.lib.storage;
 public class SettingsManager {
 
     private static SettingsManager INSTANCE;
-    private boolean defaultLocation;
-    private String pdfFolderPath;
+    private SettingsModel settingsModel;
 
     private SettingsManager() {
-        defaultLocation = true;
-        pdfFolderPath = "";
+        settingsModel = new SettingsModel();
     }
 
     public static SettingsManager getInstance() {
@@ -32,19 +32,19 @@ public class SettingsManager {
     }
 
     public boolean isDefaultLocation() {
-        return defaultLocation;
+        return settingsModel.isDefaultLocation();
     }
 
     public void setDefaultLocation(boolean defaultLocation) {
-        this.defaultLocation = defaultLocation;
+        this.settingsModel.setDefaultLocation(defaultLocation);
     }
 
     public String getPdfFolderPath() {
-        return pdfFolderPath;
+        return settingsModel.getPdfFolderPath();
     }
 
     public void setPdfFolderPath(String pdfFolderPath) {
-        this.pdfFolderPath = pdfFolderPath;
+        this.settingsModel.setPdfFolderPath(pdfFolderPath);
     }
 
 }

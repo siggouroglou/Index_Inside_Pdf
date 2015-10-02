@@ -1,25 +1,33 @@
 package gr.indexinsidepdf.controller;
 
+import gr.indexinsidepdf.lib.PdfProccessManager;
 import gr.indexinsidepdf.lib.storage.IOManager;
+import gr.indexinsidepdf.lib.storage.PdfConfigurationManager;
+import gr.indexinsidepdf.model.PdfNode;
+import gr.softaware.java_1_0.data.structure.tree.basic.BasicTree;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.TreeTableView;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -35,9 +43,11 @@ public class MainViewController implements Initializable {
     @FXML
     private GridPane gridPane;
     @FXML
-    private TreeView<?> treeView;
+    private TreeTableView<PdfNode> treeTableView;
     @FXML
     private MenuItem fileMenuExportCoverItem;
+    @FXML
+    private Button step1NextButton;
     @FXML
     private Button step2ExportIndexButton;
 
@@ -56,8 +66,9 @@ public class MainViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         assert gridPane != null : "fx:id=\"gridPane\" was not injected: check your FXML file 'MainView.fxml'.";
-        assert treeView != null : "fx:id=\"treeView\" was not injected: check your FXML file 'MainView.fxml'.";
+        assert treeTableView != null : "fx:id=\"treeTableView\" was not injected: check your FXML file 'MainView.fxml'.";
         assert fileMenuExportCoverItem != null : "fx:id=\"fileMenuExportCoverItem\" was not injected: check your FXML file 'MainView.fxml'.";
+        assert step1NextButton != null : "fx:id=\"step1NextButton\" was not injected: check your FXML file 'MainView.fxml'.";
         assert step2ExportIndexButton != null : "fx:id=\"step2ExportIndexButton\" was not injected: check your FXML file 'MainView.fxml'.";
         assert step3ProgressLabel != null : "fx:id=\"step3ProgressLabel\" was not injected: check your FXML file 'MainView.fxml'.";
         assert srcLocationTxtField != null : "fx:id=\"srcLocationTxtField\" was not injected: check your FXML file 'MainView.fxml'.";
@@ -66,9 +77,12 @@ public class MainViewController implements Initializable {
 
         // Menu binding.
         fileMenuExportCoverItem.disableProperty().bind(IOManager.getInstance().coverSavedProperty());
+        // Step 1 binding.
+        step1NextButton.disableProperty().bind(Bindings.isEmpty(srcLocationTxtField.textProperty()));
+        // Step 2 binding.
         step2ExportIndexButton.disableProperty().bind(IOManager.getInstance().indexSaveProperty());
     }
-    
+
     private Stage getStage() {
         return (Stage) gridPane.getScene().getWindow();
     }
@@ -76,6 +90,24 @@ public class MainViewController implements Initializable {
     //<editor-fold defaultstate="collapsed" desc="Moving to Steps">
     @FXML
     void step1NextClick(ActionEvent event) {
+        // Check if the scrlocation is a directory.
+        File srcFolder = new File(srcLocationTxtField.textProperty().get());
+        if (!srcFolder.isDirectory()) {
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Πρόβλημα");
+            error.setHeaderText(null);
+            error.setContentText("Η διαδρομή που δώσατε δεν είναι αποδεκτή.");
+            error.show();
+            return;
+        }
+        
+        // Store the srcFolder.
+        PdfConfigurationManager.getInstance().getPdfConfiguration().setSrcFolder(srcFolder);
+        
+        // Generate the tree.
+        PdfProccessManager.getInstance().generateTree();
+        PdfProccessManager.getInstance().buildTreeView(treeTableView);
+        
         move(StepDirection.FORWARD);
     }
 
@@ -100,6 +132,7 @@ public class MainViewController implements Initializable {
     }
 
     private int currentStepOffset = 0;
+
     private enum StepDirection {
 
         FORWARD, BACKWARD
@@ -123,7 +156,20 @@ public class MainViewController implements Initializable {
     //<editor-fold defaultstate="collapsed" desc="Step 1">
     @FXML
     void srcLocationSearchClick(ActionEvent event) {
+        // Select the file.
+        DirectoryChooser choose = new DirectoryChooser();
+        choose.setTitle("Επιλογή τοποθεσίας για ευρετηρίαση");
+        File folder = choose.showDialog(getStage());
+        if (folder == null || !folder.isDirectory()) {
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Πρόβλημα");
+            error.setHeaderText(null);
+            error.setContentText("Η διαδρομή που δώσατε δεν είναι αποδεκτή.");
+            error.show();
+            return;
+        }
 
+        srcLocationTxtField.textProperty().set(folder.getAbsolutePath());
     }
     //</editor-fold>
 
@@ -304,7 +350,6 @@ public class MainViewController implements Initializable {
         stageNew.initStyle(StageStyle.UNDECORATED);
         stageNew.initOwner(getStage());
 
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/HelpAboutView.fxml"));
         Parent root = null;
         try {
@@ -312,7 +357,7 @@ public class MainViewController implements Initializable {
         } catch (IOException ignored) {
         }
         stageNew.setScene(new Scene(root));
-        
+
         stageNew.getIcons().add(new Image("/files/images/logo.png"));
         stageNew.show();
     }
