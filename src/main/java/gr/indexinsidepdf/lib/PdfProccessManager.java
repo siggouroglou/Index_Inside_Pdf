@@ -50,7 +50,7 @@ public class PdfProccessManager {
         // Create the root tree parentTreeItem.
         PdfNode rootNode = new PdfNode();
         rootNode.setFile(rootFile);
-        rootNode.setTitle(rootFile.getName());
+        rootNode.setTitle(getTitle(rootFile));
         rootNode.setFileType(FileType.DIRECTORY);
 
         // Generate the tree to fill with files.
@@ -68,19 +68,21 @@ public class PdfProccessManager {
             return name.toLowerCase().endsWith(".pdf") || file.isDirectory();
         };
 
-        // Create the root tree parentTreeItem.
+        // Create the root tree parentTreeItem again. The file is the only filed that equals is checking.
         PdfNode parentNode = new PdfNode();
         parentNode.setFile(rootDirectory);
-        parentNode.setTitle(rootDirectory.getName());
-        parentNode.setFileType(FileType.DIRECTORY);
+//        parentNode.setTitle(getTitle(rootDirectory));
+//        parentNode.setFileType(FileType.DIRECTORY);
 
         // Raad recurcively.
         for (File file : rootDirectory.listFiles(filenameFilter)) {
-            // Create the child tree parentTreeItem.
+            // Create the child tree parentTreeItem if id doesn't exist.
             PdfNode childNode = new PdfNode();
             childNode.setFile(file);
-            childNode.setTitle(file.getName());
-            tree.add(parentNode, childNode);
+            childNode.setTitle(getTitle(file));
+            if (!tree.containsChild(parentNode, childNode)) {
+                tree.add(parentNode, childNode);
+            }
 
             if (file.isFile()) {
                 parentNode.setFileType(FileType.FILE);
@@ -90,6 +92,20 @@ public class PdfProccessManager {
                 readFileSystem(file);
             }
         }
+    }
+
+    private String getTitle(File file) {
+        if (file.isDirectory()) {
+            return file.getName();
+        }
+        if (file.isFile()) {
+            String filename = file.getName();
+            int dotIndex = filename.lastIndexOf(".");
+
+            return filename.substring(0, (dotIndex < 0 ? (int) file.length() - 1 : dotIndex));
+        }
+
+        throw new IllegalArgumentException("Only directory or folred are allowed.");
     }
 
     public void buildTreeView() {
@@ -116,7 +132,9 @@ public class PdfProccessManager {
             // Add the child to the parent's children.
             PdfNode parentTreeItem = (PdfNode) parent.getData();
             PdfNode childTreeItem = (PdfNode) curent.getData();
-            parentTreeItem.getChildren().add(childTreeItem);
+            if (!childTreeItem.isDeleted() && !parentTreeItem.getChildren().contains(childTreeItem)) {
+                parentTreeItem.getChildren().add(childTreeItem);
+            }
             return TreeOrderingOutput.CONTINUE;
         });
 
@@ -128,9 +146,10 @@ public class PdfProccessManager {
             return new SimpleStringProperty(title);
         });
 
-        // Add the root to the tree table view.
+        // Add the root and column to the tree table view.
         root.setExpanded(true);
         treeTableView.setRoot(root);
+        treeTableView.getColumns().clear();
         treeTableView.getColumns().add(column);
     }
 
@@ -142,14 +161,13 @@ public class PdfProccessManager {
             throw new NullPointerException("TreeTableView must not be null.");
         }
 
-        // Find the parent of this node.
-        PdfNode parent = tree.findParent(node);
-
-        // Remove from the tree.
-        tree.remove(node);
+        // Remove from the tree by changing the deleted property.
+        node.setDeleted(true);
 
         // Remove from the tree table view.
+        PdfNode parent = tree.findParent(node);
         parent.getChildren().remove(node);
+        treeTableView.requestFocus();
     }
 
     public boolean moveNodeUp(PdfNode node) {
@@ -170,7 +188,7 @@ public class PdfProccessManager {
         int index = parent.getChildren().indexOf(node);
         parent.getChildren().remove(index);
         parent.getChildren().add(index + STEP, node);
-        
+
         // Select the item again.
         treeTableView.getSelectionModel().select(node);
         treeTableView.requestFocus();
@@ -196,11 +214,32 @@ public class PdfProccessManager {
         int index = parent.getChildren().indexOf(node);
         parent.getChildren().remove(index);
         parent.getChildren().add(index + STEP, node);
-        
+
         // Select the item again.
         treeTableView.getSelectionModel().select(node);
         treeTableView.requestFocus();
 
         return true;
+    }
+
+    public void renameNode(PdfNode node, String name) {
+        if (node == null || name == null) {
+            throw new NullPointerException("Argument must not be null.");
+        }
+
+        // Rename the node.
+        node.setTitle(name);
+
+        // Rename the treeItem.
+        node.setValue(name);
+        
+        // Request focus for this node.
+        treeTableView.requestFocus();
+    }
+
+    public void refreshTree() {
+        // Read the file system again to find any new node and add it to the trees.
+        readFileSystem(tree.getRoot().getData().getFile());
+        buildTreeView();
     }
 }

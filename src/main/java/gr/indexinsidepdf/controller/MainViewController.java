@@ -7,6 +7,7 @@ import gr.indexinsidepdf.model.PdfNode;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
@@ -23,6 +24,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.image.Image;
@@ -182,7 +184,11 @@ public class MainViewController implements Initializable {
         // Move the node up.
         if (!PdfProccessManager.getInstance().moveNodeUp(node)) {
             alertError("Η εγγραφή δεν μπορεί να μετακινηθεί πιο πάνω.");
+            return;
         }
+
+        // Change the state of the index property.
+        IOManager.getInstance().indexSaveProperty().set(false);
     }
 
     @FXML
@@ -198,12 +204,35 @@ public class MainViewController implements Initializable {
         // Move the node up.
         if (!PdfProccessManager.getInstance().moveNodeDown(node)) {
             alertError("Η εγγραφή δεν μπορεί να μετακινηθεί πιο κάτω.");
+            return;
         }
+
+        // Change the state of the index property.
+        IOManager.getInstance().indexSaveProperty().set(false);
     }
 
     @FXML
     void step2RenameClick(ActionEvent event) {
+        // Get the selected PdfView from the treeTableView.
+        TreeItem<PdfNode> selectedItem = treeTableView.getSelectionModel().getSelectedItem();
+        if (selectedItem == null) {
+            alertError("Θα πρέπει να επιλέξετε κάποια εγγραφή στον πίνακα.");
+            return;
+        }
+        PdfNode node = (PdfNode) selectedItem;
 
+        // Open a modal to fill with the new name.
+        TextInputDialog dialog = new TextInputDialog(node.getTitle());
+        dialog.setTitle("Μετονομασία");
+        dialog.setHeaderText(null);
+        dialog.setContentText("Νέο όνομα:");
+
+        // Get the new name.
+        Optional<String> result = dialog.showAndWait();
+        PdfProccessManager.getInstance().renameNode(node, result.get());
+
+        // Change the state of the index property.
+        IOManager.getInstance().indexSaveProperty().set(false);
     }
 
     @FXML
@@ -224,11 +253,17 @@ public class MainViewController implements Initializable {
 
         // Remove the node.
         PdfProccessManager.getInstance().removeNode(node);
+
+        // Change the state of the index property.
+        IOManager.getInstance().indexSaveProperty().set(false);
     }
 
     @FXML
     void step2RefreshTreeClick(ActionEvent event) {
+        PdfProccessManager.getInstance().refreshTree();
 
+        // Change the state of the index property.
+        IOManager.getInstance().indexSaveProperty().set(false);
     }
 
     @FXML

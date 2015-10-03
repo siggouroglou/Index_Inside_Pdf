@@ -15,12 +15,14 @@ public class PdfNode extends TreeItem implements TreeNode {
     private String title;
     private File file;
     private FileType fileType;
+    private boolean deleted;
 
     public PdfNode() {
         super();
         this.title = "";
         this.file = null;
         this.fileType = FileType.FILE;
+        this.deleted = false;
     }
 
     public String getTitle() {
@@ -45,6 +47,14 @@ public class PdfNode extends TreeItem implements TreeNode {
 
     public void setFileType(FileType fileType) {
         this.fileType = fileType;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     @Override

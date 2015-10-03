@@ -1,5 +1,6 @@
 package gr.softaware.java_1_0.data.structure.tree.basic;
 
+import gr.indexinsidepdf.model.PdfNode;
 import gr.softaware.java_1_0.data.structure.tree.TreeNode;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -295,6 +296,27 @@ public final class BasicTree<T extends TreeNode> implements TreeCollection<T> {
 
         // Return true if the node is found.
         return nodeFound != null;
+    }
+
+    /**
+     * Check if the parent contains this child. This method is much faster than
+     * contains cause it is not check with preorder the whole tree to find the
+     * node but it searching the whole tree only fot the parent node.
+     *
+     * @param parent The parent node of the node i am searching for.
+     * @param child The node i am searching for.
+     * @return true if the node is existing false in all other cases.
+     */
+    public boolean containsChild(T parent, T child) {
+        // Check for null argument.
+        if (parent == null || child == null) {
+            return false;
+        }
+
+        // Find the parent.
+        BasicTreeNode<T> parentNode = findNode(parent);
+
+        return parentNode.getChildren().stream().anyMatch((curent) -> (curent.getData().equals(child)));
     }
 
     @Override

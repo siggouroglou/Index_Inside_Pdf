@@ -112,17 +112,21 @@ public final class IOManager {
         }
     }
 
-    public void loadCover(Stage stage) {
+    public boolean loadCover(Stage stage) {
         try {
             String json = FileUtils.readFileToString(coverFile.getFile());
             CoverModel coverModelNew = new Gson().fromJson(json, CoverModel.class);
             CoverModel coverModel = CoverManager.getInstance().getCoverModel();
             BeanUtils.copyProperties(coverModel, coverModelNew);
+            return true;
         } catch (IOException ex) {
             logger.error("Το αρχείο δεν βρέθηκε για να γίνει load στο εξώφυλλο.", ex);
         } catch (IllegalAccessException | InvocationTargetException ex) {
             logger.error("Δεν μπόρεσε να μεταφραστεί το αρχείο από json σε object.", ex);
+        } catch(Exception ex) {
+            logger.error("Δεν μπόρεσε να μεταφραστεί το αρχείο από json σε object για γενικό λάθος.", ex);
         }
+        return false;
     }
 
 }
