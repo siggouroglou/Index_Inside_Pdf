@@ -20,9 +20,20 @@ import javafx.scene.control.TreeTableView;
 public class PdfProccessManager {
 
     private static PdfProccessManager INSTANCE;
+    private TreeTableView<PdfNode> treeTableView;
     private BasicTree<PdfNode> tree;
 
     private PdfProccessManager() {
+        this.treeTableView = null;
+        this.tree = null;
+    }
+
+    public void setTreeTableView(TreeTableView<PdfNode> treeTableView) {
+        this.treeTableView = treeTableView;
+    }
+
+    public BasicTree<PdfNode> getTree() {
+        return tree;
     }
 
     public static PdfProccessManager getInstance() {
@@ -81,16 +92,16 @@ public class PdfProccessManager {
         }
     }
 
-    public void buildTreeView(TreeTableView<PdfNode> treeTableView) {
-        if(treeTableView == null){
+    public void buildTreeView() {
+        if (treeTableView == null) {
             throw new NullPointerException("Argument must not be null.");
         }
-        
+
         // Clear the existing root.
-        if(treeTableView.getRoot() != null){
+        if (treeTableView.getRoot() != null) {
             treeTableView.setRoot(null);
         }
-        
+
         // Create the new root.
         PdfNode root = (PdfNode) tree.getRoot().getData();
         root.setExpanded(false);
@@ -112,7 +123,7 @@ public class PdfProccessManager {
         // Create the only extisting column.
         TreeTableColumn<PdfNode, String> column = new TreeTableColumn<>("Περιεχόμενα");
         column.setCellValueFactory((CellDataFeatures<PdfNode, String> p) -> {
-            PdfNode value = (PdfNode)p.getValue();
+            PdfNode value = (PdfNode) p.getValue();
             String title = value.getTitle();
             return new SimpleStringProperty(title);
         });
@@ -121,5 +132,75 @@ public class PdfProccessManager {
         root.setExpanded(true);
         treeTableView.setRoot(root);
         treeTableView.getColumns().add(column);
+    }
+
+    public void removeNode(PdfNode node) {
+        if (tree == null) {
+            throw new NullPointerException("Tree must not be null.");
+        }
+        if (treeTableView == null) {
+            throw new NullPointerException("TreeTableView must not be null.");
+        }
+
+        // Find the parent of this node.
+        PdfNode parent = tree.findParent(node);
+
+        // Remove from the tree.
+        tree.remove(node);
+
+        // Remove from the tree table view.
+        parent.getChildren().remove(node);
+    }
+
+    public boolean moveNodeUp(PdfNode node) {
+        if (node == null) {
+            throw new NullPointerException("Argument must not be null.");
+        }
+        final int STEP = -1;
+
+        // Move this child in tree.
+        try {
+            tree.moveWithStep(node, STEP);
+        } catch (IllegalArgumentException ex) {
+            return false;
+        }
+
+        // Move the child to the treeTableView.
+        PdfNode parent = tree.findParent(node);
+        int index = parent.getChildren().indexOf(node);
+        parent.getChildren().remove(index);
+        parent.getChildren().add(index + STEP, node);
+        
+        // Select the item again.
+        treeTableView.getSelectionModel().select(node);
+        treeTableView.requestFocus();
+
+        return true;
+    }
+
+    public boolean moveNodeDown(PdfNode node) {
+        if (node == null) {
+            throw new NullPointerException("Argument must not be null.");
+        }
+        final int STEP = 1;
+
+        // Move this child in tree.
+        try {
+            tree.moveWithStep(node, STEP);
+        } catch (IllegalArgumentException ex) {
+            return false;
+        }
+
+        // Move the child to the treeTableView.
+        PdfNode parent = tree.findParent(node);
+        int index = parent.getChildren().indexOf(node);
+        parent.getChildren().remove(index);
+        parent.getChildren().add(index + STEP, node);
+        
+        // Select the item again.
+        treeTableView.getSelectionModel().select(node);
+        treeTableView.requestFocus();
+
+        return true;
     }
 }

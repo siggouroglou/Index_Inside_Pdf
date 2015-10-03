@@ -157,7 +157,8 @@ public final class BasicTree<T extends TreeNode> implements TreeCollection<T> {
      *
      * @param parent The parent of the current node.
      * @param current The current node.
-     * @param treeOrderStrategy a strategy to run for the parent and current nodes.
+     * @param treeOrderStrategy a strategy to run for the parent and current
+     * nodes.
      * @return a tree node depending the strategy.
      * @throws NullPointerException in case of a null argument.
      */
@@ -470,6 +471,44 @@ public final class BasicTree<T extends TreeNode> implements TreeCollection<T> {
     public void clear() {
         this.root = null;
         this.size = 0;
+    }
+
+    /**
+     * Moves the nodes before or after his position depending the step. Node is
+     * moving on the same level. If the node is not found nothing happens.
+     *
+     * @param node the node to be moved.
+     * @param step negative or positive means before or after.
+     * @throws NullPointerException in case of a null argument.
+     * @throws IllegalArgumentException in case the step is out of bounds.
+     */
+    public void moveWithStep(T node, int step) {
+        if (node == null) {
+            throw new NullPointerException("Argument must not be null.");
+        }
+
+        // Find the parent of this node.
+        BasicTreeNode<T> parentNode = findParentNode(node);
+        if (parentNode == null) {
+            return;
+        }
+
+        // Find the position of the node.
+        BasicTreeNode<T> childNode = findNode(node);
+        int index = parentNode.getChildren().indexOf(childNode);
+
+        // Remove the node. Now the index will be index.
+        parentNode.getChildren().remove(index);
+
+        // Add the node to the index-1+step position.
+        try {
+            parentNode.getChildren().add(index + step, childNode);
+        } catch (IndexOutOfBoundsException ex) {
+            // Add the node again.
+            parentNode.getChildren().add(index, childNode);
+            // Throw the correct exception.
+            throw new IllegalArgumentException("Step is not valid.");
+        }
     }
 
     public List<? super TreeNode> getDataPreOrdered() {
