@@ -343,8 +343,14 @@ public class StorageFileManager {
      * clicks on the YES button then the save method is invoked.
      *
      * @param stageParent The parent stage for the modal.
+     * 
+     * @throws NullPointerException in case of a null stage.
      */
     public void questionForSave(Stage stageParent) {
+        if(stageParent == null){
+            throw new NullPointerException("Argument must not be null");
+        }
+        
         // Create the buttons.
         ButtonType yesButton = new ButtonType(questionForSaveYesButtonText, ButtonData.OK_DONE);
         ButtonType noButton = new ButtonType(questionForSaveNoButtonText, ButtonData.CANCEL_CLOSE);
@@ -365,13 +371,22 @@ public class StorageFileManager {
 
     /**
      * Select a file if there is not selected yet and save the changes using the
-     * StorageFileManagerStrategy.
+     * StorageFileManagerStrategy. In case the file is not existing create it.
      *
      * @param stageParent The parent stage of this modal.
+     *
+     * @throws NullPointerException in case of a null stage or file.
      */
     public void save(Stage stageParent) {
-        // Has user selected a file.
+        if (stageParent == null) {
+            throw new NullPointerException("Argument stageParent must not be null.");
+        }
         if (file == null) {
+            throw new NullPointerException("The state of this object i not correct. The file property must not be null.");
+        }
+
+        // Has user selected a file.
+        if (!file.exists()) {
             // Select the file to save to.
             FileChooser choose = new FileChooser();
             choose.setTitle(saveFileChooserTitle);
@@ -398,12 +413,82 @@ public class StorageFileManager {
     }
 
     /**
+     * Save to the given path using the StorageFileManagerStrategy. In case the
+     * filePath is not existing create it. <br/>
+     * This method checks the arguments and runs the save(stage, file) method.
+     *
+     * @param stageParent The parent stage of this modal.
+     * @param filePath The path to the file that will be used for saving. This
+     * file path will be stored to the object for further use.
+     *
+     * @throws NullPointerException in case of a null arguments.
+     */
+    public void save(Stage stageParent, String filePath) {
+        if (stageParent == null) {
+            throw new NullPointerException("Argument stageParent must not be null.");
+        }
+        if (filePath == null) {
+            throw new NullPointerException("Argument filePath must not be null.");
+        }
+
+        save(stageParent, new File(filePath));
+    }
+
+    /**
+     * Save to file given and use the StorageFileManagerStrategy. In case the
+     * file is not existing create it.
+     *
+     * @param stageParent The parent stage of this modal.
+     * @param newFile The file to use to save. This file will be saved for
+     * further saving.
+     *
+     * @throws NullPointerException in case of a null stage or file.
+     * @throws IllegalArgumentException in case of the given file is a directory
+     * etc but not a file.
+     */
+    public void save(Stage stageParent, File newFile) {
+        if (stageParent == null) {
+            throw new NullPointerException("Argument stageParent must not be null.");
+        }
+        if (newFile == null) {
+            throw new NullPointerException("Argument newFile must not be null.");
+        }
+        if (newFile.exists() && !newFile.isFile()) {
+            throw new IllegalArgumentException("File must be a type of file (not deirectory etc).");
+        }
+
+        // Override the file field.
+        file = newFile;
+        if (!file.exists()) {
+            try {
+                FileUtils.touch(file);
+            } catch (IOException ex) {
+                Alert error = new Alert(Alert.AlertType.ERROR);
+                error.setTitle(errorTitle);
+                error.setHeaderText(errorHeader);
+                error.setContentText(errorText == null ? ex.getMessage() : errorText);
+                error.show();
+                return;
+            }
+        }
+
+        // Save to the file.
+        storageFileManagerStrategy.saveFile(file);
+    }
+
+    /**
      * Select a file to save and this file will be used for later saving and
      * save the changes using the StorageFileManagerStrategy.
      *
      * @param stageParent The parent stage of this modal.
+     *
+     * @throws NullPointerException in case of a null stage.
      */
     public void saveAs(Stage stageParent) {
+        if (stageParent == null) {
+            throw new NullPointerException("Argument stageParent must not be null.");
+        }
+        
         // Select the file to save to.
         FileChooser choose = new FileChooser();
         choose.setTitle(saveAsFileChooserTitle);
@@ -429,7 +514,8 @@ public class StorageFileManager {
     }
 
     /**
-     * Select a file and put the path to a TextInputControl. Returns the full path or in case of error null.
+     * Select a file and put the path to a TextInputControl. Returns the full
+     * path or in case of error null.
      *
      * @param stageParent The parent stage of this modal.
      * @param textField a TextInputControl that will get the absolute path as

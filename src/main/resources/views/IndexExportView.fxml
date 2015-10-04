@@ -43,7 +43,7 @@
             <HBox alignment="CENTER_RIGHT" spacing="5.0" BorderPane.alignment="CENTER">
                <children>
                   <Button mnemonicParsing="false" onAction="#closeClick" text="Κλεισιμο" />
-                  <Button mnemonicParsing="false" onAction="#exportClick" text="Εξαγωγη" />
+                  <Button fx:id="exportButton" mnemonicParsing="false" onAction="#exportClick" text="Εξαγωγη" />
                </children>
             </HBox>
          </bottom>

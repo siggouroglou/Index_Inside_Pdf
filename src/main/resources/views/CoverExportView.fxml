@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="200.0" prefWidth="400.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="gr.indexinsidepdf.controller.CoverExportViewController">
+<AnchorPane id="AnchorPane" prefHeight="200.0" prefWidth="400.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gr.indexinsidepdf.controller.CoverExportViewController">
     <stylesheets>
         <URL value="@/files/css/softaware_1_0.css" />
     </stylesheets>
@@ -43,7 +43,7 @@
             <HBox alignment="CENTER_RIGHT" spacing="5.0" BorderPane.alignment="CENTER">
                <children>
                   <Button mnemonicParsing="false" onAction="#closeClick" text="Κλεισιμο" />
-                  <Button mnemonicParsing="false" onAction="#exportClick" text="Εξαγωγη" />
+                  <Button fx:id="exportButton" mnemonicParsing="false" onAction="#exportClick" text="Εξαγωγη" />
                </children>
             </HBox>
          </bottom>

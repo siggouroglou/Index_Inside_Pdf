@@ -1,16 +1,26 @@
 package gr.indexinsidepdf.lib.storage;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import gr.indexinsidepdf.lib.PdfProccessManager;
 import gr.indexinsidepdf.model.CoverModel;
+import gr.indexinsidepdf.model.PdfNode;
+import gr.softaware.java_1_0.data.structure.tree.basic.BasicTreeNode;
 import gr.softaware.javafx_1_0.io.fileSaving.StorageFileManager;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
 import java.util.Optional;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.FileUtils;
@@ -20,7 +30,7 @@ import org.apache.log4j.Logger;
  * A utilities class that manages the saved state and the io of this
  * application.
  *
- * @author siggouroglou@gmail.com
+ * @author syggouroglou@gmail.com
  */
 public final class IOManager {
 
@@ -29,8 +39,10 @@ public final class IOManager {
     private static IOManager INSTANCE;
     private final StorageFileManager coverFile;
     private final StorageFileManager indexFile;
+    private final BooleanProperty indexImported;
 
     private IOManager() {
+
         this.coverFile = new StorageFileManager.StorageFileManagerBuilder()
                 .errorTitle("Πρόβλημα")
                 .errorHeader(null)
@@ -46,7 +58,34 @@ public final class IOManager {
                 })
                 .build();
         this.indexFile = new StorageFileManager.StorageFileManagerBuilder()
+                .errorTitle("Πρόβλημα")
+                .errorHeader(null)
+                .errorText(null)
+                .storageFileManagerStrategy((file) -> {
+                    Gson gson = new GsonBuilder()
+                    .addSerializationExclusionStrategy(new ExclusionStrategy() {
+                        @Override
+                        public boolean shouldSkipField(FieldAttributes fieldAttributes) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean shouldSkipClass(Class<?> aClass) {
+                            return aClass.equals(TreeItem.class);
+                        }
+                    })
+                    .create();
+                    final Type basicTreeNodeType = new TypeToken<BasicTreeNode<PdfNode>>() {
+                    }.getType();
+                    String json = gson.toJson(PdfProccessManager.getInstance().getTree().getRoot(), basicTreeNodeType);
+                    try {
+                        FileUtils.writeStringToFile(file, json);
+                    } catch (IOException ex) {
+                        logger.error("Οι ρυθμίσεις δεν αποθηκεύθηκαν στο αρχείο για το εξώφυλλο.", ex);
+                    }
+                })
                 .build();
+        this.indexImported = new SimpleBooleanProperty(false);
     }
 
     public static IOManager getInstance() {
@@ -60,8 +99,12 @@ public final class IOManager {
         return coverFile.getSavedProperty();
     }
 
-    public BooleanProperty indexSaveProperty() {
+    public BooleanProperty indexSavedProperty() {
         return indexFile.getSavedProperty();
+    }
+
+    public BooleanProperty indexImportedProperty() {
+        return indexImported;
     }
 
     public void questionForSaveCover(Stage stage) {
@@ -92,16 +135,30 @@ public final class IOManager {
         }
     }
 
-    public void saveCover(Stage stage) {
-        coverFile.save(stage);
+    public void saveCover(Stage stage, String filePath) {
+        coverFile.save(stage, filePath);
+        coverSavedProperty().set(true);
     }
 
-    public void saveIndex(Stage stage) {
-        indexFile.save(stage);
+    public void saveIndex(Stage stage, String filePath) {
+        indexFile.save(stage, filePath);
+        indexSavedProperty().set(true);
     }
 
-    public void chooseFile(Stage stage, TextField textField) {
+    public void chooseCoverFile(Stage stage, TextField textField) {
         String fullPath = coverFile.selectFile(stage, textField);
+
+        if (fullPath == null) {
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Πρόβλημα");
+            error.setHeaderText(null);
+            error.setContentText("Το αρχείο που δώσατε δεν είναι αποδεκτό.");
+            error.show();
+        }
+    }
+
+    public void chooseIndexFile(Stage stage, TextField textField) {
+        String fullPath = indexFile.selectFile(stage, textField);
 
         if (fullPath == null) {
             Alert error = new Alert(Alert.AlertType.ERROR);
@@ -123,7 +180,48 @@ public final class IOManager {
             logger.error("Το αρχείο δεν βρέθηκε για να γίνει load στο εξώφυλλο.", ex);
         } catch (IllegalAccessException | InvocationTargetException ex) {
             logger.error("Δεν μπόρεσε να μεταφραστεί το αρχείο από json σε object.", ex);
-        } catch(Exception ex) {
+        } catch (Exception ex) {
+            logger.error("Δεν μπόρεσε να μεταφραστεί το αρχείο από json σε object για γενικό λάθος.", ex);
+        }
+        return false;
+    }
+
+    public boolean loadIndex(Stage stage) {
+        Gson gson = new GsonBuilder()
+                .addDeserializationExclusionStrategy(new ExclusionStrategy() {
+                    @Override
+                    public boolean shouldSkipField(FieldAttributes fieldAttributes) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean shouldSkipClass(Class<?> aClass) {
+                        return aClass.equals(TreeItem.class);
+                    }
+                })
+                .create();
+        try {
+            // Get the root.
+            String json = FileUtils.readFileToString(indexFile.getFile());
+            final Type basicTreeNodeType = new TypeToken<BasicTreeNode<PdfNode>>() {
+            }.getType();
+            BasicTreeNode<PdfNode> rootNew = gson.fromJson(json, basicTreeNodeType);
+            if (rootNew == null || rootNew.getData() == null) {
+                return false;
+            }
+
+            // Clear deleted cache.
+            PdfProccessManager.getInstance().clearDeletedNodes();
+
+            // Set the new root to the the tree.
+            PdfProccessManager.getInstance().getTree().setRoot(rootNew);
+
+            // Rebuild tree view.
+            PdfProccessManager.getInstance().buildTreeView();
+            return true;
+        } catch (IOException ex) {
+            logger.error("Το αρχείο δεν βρέθηκε για να γίνει load στο εξώφυλλο.", ex);
+        } catch (Exception ex) {
             logger.error("Δεν μπόρεσε να μεταφραστεί το αρχείο από json σε object για γενικό λάθος.", ex);
         }
         return false;

@@ -8,7 +8,10 @@ import gr.softaware.java_1_0.data.structure.tree.basic.TreeOrderingOutput;
 import gr.softaware.java_1_0.data.types.FileType;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.HashSet;
+import java.util.Set;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableColumn.CellDataFeatures;
 import javafx.scene.control.TreeTableView;
@@ -22,10 +25,12 @@ public class PdfProccessManager {
     private static PdfProccessManager INSTANCE;
     private TreeTableView<PdfNode> treeTableView;
     private BasicTree<PdfNode> tree;
+    private final Set<PdfNode> deletedNodes;
 
     private PdfProccessManager() {
         this.treeTableView = null;
         this.tree = null;
+        this.deletedNodes = new HashSet<>();
     }
 
     public void setTreeTableView(TreeTableView<PdfNode> treeTableView) {
@@ -34,6 +39,10 @@ public class PdfProccessManager {
 
     public BasicTree<PdfNode> getTree() {
         return tree;
+    }
+
+    public void clearDeletedNodes() {
+        this.deletedNodes.clear();
     }
 
     public static PdfProccessManager getInstance() {
@@ -80,7 +89,7 @@ public class PdfProccessManager {
             PdfNode childNode = new PdfNode();
             childNode.setFile(file);
             childNode.setTitle(getTitle(file));
-            if (!tree.containsChild(parentNode, childNode)) {
+            if (!deletedNodes.contains(childNode) && !tree.containsChild(parentNode, childNode)) {
                 tree.add(parentNode, childNode);
             }
 
@@ -120,7 +129,7 @@ public class PdfProccessManager {
 
         // Create the new root.
         PdfNode root = (PdfNode) tree.getRoot().getData();
-        root.setExpanded(false);
+        root.getTreeItem().setExpanded(false);
 
         // Read the tree and fill the root children.
         tree.preOrder(tree.getRoot(), tree.getRoot(), (BasicTreeNode parent, BasicTreeNode curent) -> {
@@ -132,8 +141,8 @@ public class PdfProccessManager {
             // Add the child to the parent's children.
             PdfNode parentTreeItem = (PdfNode) parent.getData();
             PdfNode childTreeItem = (PdfNode) curent.getData();
-            if (!childTreeItem.isDeleted() && !parentTreeItem.getChildren().contains(childTreeItem)) {
-                parentTreeItem.getChildren().add(childTreeItem);
+            if (!deletedNodes.contains(childTreeItem) && !parentTreeItem.getTreeItem().getChildren().contains(childTreeItem.getTreeItem())) {
+                parentTreeItem.getTreeItem().getChildren().add(childTreeItem.getTreeItem());
             }
             return TreeOrderingOutput.CONTINUE;
         });
@@ -141,33 +150,18 @@ public class PdfProccessManager {
         // Create the only extisting column.
         TreeTableColumn<PdfNode, String> column = new TreeTableColumn<>("Περιεχόμενα");
         column.setCellValueFactory((CellDataFeatures<PdfNode, String> p) -> {
-            PdfNode value = (PdfNode) p.getValue();
-            String title = value.getTitle();
-            return new SimpleStringProperty(title);
+            TreeItem<PdfNode> treeItem = p.getValue();
+            return new SimpleStringProperty(treeItem.getValue().getTitle());
+//            PdfNode value = (PdfNode) p.getValue();
+//            String title = value.getTitle();
+//            return new SimpleStringProperty(treeItem.get);
         });
 
         // Add the root and column to the tree table view.
-        root.setExpanded(true);
-        treeTableView.setRoot(root);
+        root.getTreeItem().setExpanded(true);
+        treeTableView.setRoot(root.getTreeItem());
         treeTableView.getColumns().clear();
         treeTableView.getColumns().add(column);
-    }
-
-    public void removeNode(PdfNode node) {
-        if (tree == null) {
-            throw new NullPointerException("Tree must not be null.");
-        }
-        if (treeTableView == null) {
-            throw new NullPointerException("TreeTableView must not be null.");
-        }
-
-        // Remove from the tree by changing the deleted property.
-        node.setDeleted(true);
-
-        // Remove from the tree table view.
-        PdfNode parent = tree.findParent(node);
-        parent.getChildren().remove(node);
-        treeTableView.requestFocus();
     }
 
     public boolean moveNodeUp(PdfNode node) {
@@ -185,12 +179,12 @@ public class PdfProccessManager {
 
         // Move the child to the treeTableView.
         PdfNode parent = tree.findParent(node);
-        int index = parent.getChildren().indexOf(node);
-        parent.getChildren().remove(index);
-        parent.getChildren().add(index + STEP, node);
+        int index = parent.getTreeItem().getChildren().indexOf(node.getTreeItem());
+        parent.getTreeItem().getChildren().remove(index);
+        parent.getTreeItem().getChildren().add(index + STEP, node.getTreeItem());
 
         // Select the item again.
-        treeTableView.getSelectionModel().select(node);
+        treeTableView.getSelectionModel().select(node.getTreeItem());
         treeTableView.requestFocus();
 
         return true;
@@ -211,12 +205,12 @@ public class PdfProccessManager {
 
         // Move the child to the treeTableView.
         PdfNode parent = tree.findParent(node);
-        int index = parent.getChildren().indexOf(node);
-        parent.getChildren().remove(index);
-        parent.getChildren().add(index + STEP, node);
+        int index = parent.getTreeItem().getChildren().indexOf(node.getTreeItem());
+        parent.getTreeItem().getChildren().remove(index);
+        parent.getTreeItem().getChildren().add(index + STEP, node.getTreeItem());
 
         // Select the item again.
-        treeTableView.getSelectionModel().select(node);
+        treeTableView.getSelectionModel().select(node.getTreeItem());
         treeTableView.requestFocus();
 
         return true;
@@ -230,16 +224,42 @@ public class PdfProccessManager {
         // Rename the node.
         node.setTitle(name);
 
-        // Rename the treeItem.
-        node.setValue(name);
-        
         // Request focus for this node.
         treeTableView.requestFocus();
     }
 
+    public void removeNode(PdfNode node) {
+        if (tree == null) {
+            throw new NullPointerException("Tree must not be null.");
+        }
+        if (treeTableView == null) {
+            throw new NullPointerException("TreeTableView must not be null.");
+        }
+
+        // Remove from the tree by changing the deleted property.
+        PdfNode parent = tree.findParent(node);
+        tree.remove(node);
+
+        // Remember which nodes i deleted.
+        deletedNodes.add(node);
+
+        // Remove from the tree table view.
+        parent.getTreeItem().getChildren().remove(node.getTreeItem());
+        treeTableView.requestFocus();
+    }
+
     public void refreshTree() {
+        // Get selected model.
+        TreeItem<PdfNode> selectedItem = treeTableView.getSelectionModel().getSelectedItem();
+
         // Read the file system again to find any new node and add it to the trees.
         readFileSystem(tree.getRoot().getData().getFile());
         buildTreeView();
+
+        // Select again the item that was selected.
+        if (selectedItem != null) {
+            treeTableView.getSelectionModel().select(selectedItem);
+            treeTableView.requestFocus();
+        }
     }
 }

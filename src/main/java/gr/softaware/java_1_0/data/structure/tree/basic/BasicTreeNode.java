@@ -42,4 +42,19 @@ public class BasicTreeNode<T extends TreeNode> {
         return this.children;
     }
 
+    public void setChildren(List<BasicTreeNode<T>> children) {
+        if (children == null) {
+            throw new NullPointerException("Argument is null");
+        }
+        if (children.isEmpty()) {
+            return;
+        }
+
+        if (this.children == null) {
+            this.children = new ArrayList<>(children.size());
+        }
+        children.stream().forEach(this.children::add);
+        this.children = children;
+    }
+
 }

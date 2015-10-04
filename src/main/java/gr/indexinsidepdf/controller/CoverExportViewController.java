@@ -3,9 +3,11 @@ package gr.indexinsidepdf.controller;
 import gr.indexinsidepdf.lib.storage.IOManager;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -18,6 +20,8 @@ public class CoverExportViewController implements Initializable {
 
     @FXML
     private TextField locationTextField;
+    @FXML
+    private Button exportButton;
 
     /**
      * Initializes the controller class.
@@ -27,6 +31,10 @@ public class CoverExportViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         assert locationTextField != null : "fx:id=\"locationTextField\" was not injected: check your FXML file 'CoverExportView.fxml'.";
+        assert exportButton != null : "fx:id=\"exportButton\" was not injected: check your FXML file 'CoverExportView.fxml'.";
+        
+        // Bindings.
+        exportButton.disableProperty().bind(Bindings.isEmpty(locationTextField.textProperty()));
     }
 
     private Stage getStage() {
@@ -35,12 +43,12 @@ public class CoverExportViewController implements Initializable {
 
     @FXML
     void scrLocationSearchClick(ActionEvent event) {
-        IOManager.getInstance().chooseFile(getStage(), locationTextField);
+        IOManager.getInstance().chooseCoverFile(getStage(), locationTextField);
     }
 
     @FXML
     void exportClick(ActionEvent event) {
-        IOManager.getInstance().saveCover(getStage());
+        IOManager.getInstance().saveCover(getStage(), locationTextField.textProperty().get());
         getStage().close();
     }
 

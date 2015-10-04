@@ -52,6 +52,8 @@ public class MainViewController implements Initializable {
     private Button step1NextButton;
     @FXML
     private Button step2ExportIndexButton;
+    @FXML
+    private Button step2RefreshTreeButton;
 
     @FXML
     private Label step3ProgressLabel;
@@ -72,6 +74,7 @@ public class MainViewController implements Initializable {
         assert fileMenuExportCoverItem != null : "fx:id=\"fileMenuExportCoverItem\" was not injected: check your FXML file 'MainView.fxml'.";
         assert step1NextButton != null : "fx:id=\"step1NextButton\" was not injected: check your FXML file 'MainView.fxml'.";
         assert step2ExportIndexButton != null : "fx:id=\"step2ExportIndexButton\" was not injected: check your FXML file 'MainView.fxml'.";
+        assert step2RefreshTreeButton != null : "fx:id=\"step2RefreshTreeButton\" was not injected: check your FXML file 'MainView.fxml'.";
         assert step3ProgressLabel != null : "fx:id=\"step3ProgressLabel\" was not injected: check your FXML file 'MainView.fxml'.";
         assert srcLocationTxtField != null : "fx:id=\"srcLocationTxtField\" was not injected: check your FXML file 'MainView.fxml'.";
         assert progressBar != null : "fx:id=\"progressBar\" was not injected: check your FXML file 'MainView.fxml'.";
@@ -82,7 +85,8 @@ public class MainViewController implements Initializable {
         // Step 1 binding.
         step1NextButton.disableProperty().bind(Bindings.isEmpty(srcLocationTxtField.textProperty()));
         // Step 2 binding.
-        step2ExportIndexButton.disableProperty().bind(IOManager.getInstance().indexSaveProperty());
+        step2ExportIndexButton.disableProperty().bind(IOManager.getInstance().indexSavedProperty());
+        step2RefreshTreeButton.disableProperty().bind(IOManager.getInstance().indexImportedProperty());
 
         // Set the treeTableView to the pdf proccess manager.
         PdfProccessManager.getInstance().setTreeTableView(treeTableView);
@@ -104,6 +108,9 @@ public class MainViewController implements Initializable {
 
         // Store the srcFolder.
         PdfConfigurationManager.getInstance().getPdfConfiguration().setSrcFolder(srcFolder);
+        
+        // Clear the deletedNodes cache.
+        PdfProccessManager.getInstance().clearDeletedNodes();
 
         // Generate the tree and map the tree to the treeTableView.
         PdfProccessManager.getInstance().generateTree();
@@ -179,7 +186,7 @@ public class MainViewController implements Initializable {
             alertError("Θα πρέπει να επιλέξετε κάποια εγγραφή στον πίνακα.");
             return;
         }
-        PdfNode node = (PdfNode) selectedItem;
+        PdfNode node = selectedItem.getValue();
 
         // Move the node up.
         if (!PdfProccessManager.getInstance().moveNodeUp(node)) {
@@ -188,7 +195,7 @@ public class MainViewController implements Initializable {
         }
 
         // Change the state of the index property.
-        IOManager.getInstance().indexSaveProperty().set(false);
+        IOManager.getInstance().indexSavedProperty().set(false);
     }
 
     @FXML
@@ -199,7 +206,7 @@ public class MainViewController implements Initializable {
             alertError("Θα πρέπει να επιλέξετε κάποια εγγραφή στον πίνακα.");
             return;
         }
-        PdfNode node = (PdfNode) selectedItem;
+        PdfNode node = selectedItem.getValue();
 
         // Move the node up.
         if (!PdfProccessManager.getInstance().moveNodeDown(node)) {
@@ -208,7 +215,7 @@ public class MainViewController implements Initializable {
         }
 
         // Change the state of the index property.
-        IOManager.getInstance().indexSaveProperty().set(false);
+        IOManager.getInstance().indexSavedProperty().set(false);
     }
 
     @FXML
@@ -219,7 +226,7 @@ public class MainViewController implements Initializable {
             alertError("Θα πρέπει να επιλέξετε κάποια εγγραφή στον πίνακα.");
             return;
         }
-        PdfNode node = (PdfNode) selectedItem;
+        PdfNode node = selectedItem.getValue();
 
         // Open a modal to fill with the new name.
         TextInputDialog dialog = new TextInputDialog(node.getTitle());
@@ -232,7 +239,7 @@ public class MainViewController implements Initializable {
         PdfProccessManager.getInstance().renameNode(node, result.get());
 
         // Change the state of the index property.
-        IOManager.getInstance().indexSaveProperty().set(false);
+        IOManager.getInstance().indexSavedProperty().set(false);
     }
 
     @FXML
@@ -243,7 +250,7 @@ public class MainViewController implements Initializable {
             alertError("Θα πρέπει να επιλέξετε κάποια εγγραφή στον πίνακα.");
             return;
         }
-        PdfNode node = (PdfNode) selectedItem;
+        PdfNode node = selectedItem.getValue();
 
         // Check if this node is the root node.
         if (node.equals(PdfProccessManager.getInstance().getTree().getRoot().getData())) {
@@ -255,15 +262,16 @@ public class MainViewController implements Initializable {
         PdfProccessManager.getInstance().removeNode(node);
 
         // Change the state of the index property.
-        IOManager.getInstance().indexSaveProperty().set(false);
+        IOManager.getInstance().indexSavedProperty().set(false);
     }
 
     @FXML
     void step2RefreshTreeClick(ActionEvent event) {
+        // Refresh the tree table view.
         PdfProccessManager.getInstance().refreshTree();
-
+        
         // Change the state of the index property.
-        IOManager.getInstance().indexSaveProperty().set(false);
+        IOManager.getInstance().indexSavedProperty().set(false);
     }
 
     @FXML
