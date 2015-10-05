@@ -7,10 +7,12 @@ package gr.indexinsidepdf.model;
 public class SettingsModel {
     private boolean defaultLocation;
     private String pdfFolderPath;
+    private String fileName;
 
     public SettingsModel() {
         this.defaultLocation = true;
         this.pdfFolderPath = "";
+        this.fileName = "";
     }
 
     public boolean isDefaultLocation() {
@@ -27,5 +29,13 @@ public class SettingsModel {
 
     public void setPdfFolderPath(String pdfFolderPath) {
         this.pdfFolderPath = pdfFolderPath;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }

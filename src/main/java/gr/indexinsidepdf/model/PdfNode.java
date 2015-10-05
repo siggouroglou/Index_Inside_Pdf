@@ -4,6 +4,8 @@ import gr.softaware.java_1_0.data.structure.tree.TreeNode;
 import gr.softaware.java_1_0.data.types.FileType;
 import java.io.File;
 import java.util.Objects;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.control.TreeItem;
 
 /**
@@ -13,12 +15,14 @@ import javafx.scene.control.TreeItem;
 public class PdfNode implements TreeNode {
 
     private String title;
+    private final StringProperty titlePoperty;
     private File file;
     private FileType fileType;
     private final TreeItem treeItem;
 
     public PdfNode() {
         this.title = "";
+        this.titlePoperty = new SimpleStringProperty("");
         this.file = null;
         this.fileType = FileType.FILE;
         this.treeItem = new TreeItem(this);
@@ -30,6 +34,12 @@ public class PdfNode implements TreeNode {
 
     public void setTitle(String title) {
         this.title = title;
+        this.titlePoperty.set(title);
+    }
+
+    public StringProperty titlePoperty() {
+        this.titlePoperty.set(title);
+        return titlePoperty;
     }
 
     public File getFile() {

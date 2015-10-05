@@ -1,6 +1,6 @@
-package gr.softaware.javafx_1_0.validation.old.model;
+package gr.softaware.javafx_1_0.validation.depricated.model;
 
-import gr.softaware.javafx_1_0.validation.old.ValidationType;
+import gr.softaware.javafx_1_0.validation.depricated.ValidationType;
 
 /**
  *

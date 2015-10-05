@@ -8,9 +8,15 @@ import gr.softaware.java_1_0.data.structure.tree.basic.TreeOrderingOutput;
 import gr.softaware.java_1_0.data.types.FileType;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import static javafx.beans.binding.Bindings.max;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.concurrent.Task;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableColumn.CellDataFeatures;
@@ -80,8 +86,6 @@ public class PdfProccessManager {
         // Create the root tree parentTreeItem again. The file is the only filed that equals is checking.
         PdfNode parentNode = new PdfNode();
         parentNode.setFile(rootDirectory);
-//        parentNode.setTitle(getTitle(rootDirectory));
-//        parentNode.setFileType(FileType.DIRECTORY);
 
         // Raad recurcively.
         for (File file : rootDirectory.listFiles(filenameFilter)) {
@@ -94,10 +98,10 @@ public class PdfProccessManager {
             }
 
             if (file.isFile()) {
-                parentNode.setFileType(FileType.FILE);
+                childNode.setFileType(FileType.FILE);
             }
             if (file.isDirectory()) {
-                parentNode.setFileType(FileType.DIRECTORY);
+                childNode.setFileType(FileType.DIRECTORY);
                 readFileSystem(file);
             }
         }
@@ -151,7 +155,7 @@ public class PdfProccessManager {
         TreeTableColumn<PdfNode, String> column = new TreeTableColumn<>("Περιεχόμενα");
         column.setCellValueFactory((CellDataFeatures<PdfNode, String> p) -> {
             TreeItem<PdfNode> treeItem = p.getValue();
-            return new SimpleStringProperty(treeItem.getValue().getTitle());
+            return treeItem.getValue().titlePoperty();
 //            PdfNode value = (PdfNode) p.getValue();
 //            String title = value.getTitle();
 //            return new SimpleStringProperty(treeItem.get);
@@ -261,5 +265,18 @@ public class PdfProccessManager {
             treeTableView.getSelectionModel().select(selectedItem);
             treeTableView.requestFocus();
         }
+    }
+
+    public void createPdf(final ProgressBar progressBar, final Label step3ProgressLabel) {
+        PdfFile pdfFile = new PdfFile.PdfFileBuilder()
+                .tree(tree)
+                .progressBar(progressBar)
+                .progressLabel(step3ProgressLabel)
+                .build();
+        pdfFile.create();
+    }
+    
+    public void createPdfResult(List<PdfNode> brokenNodes){
+        
     }
 }

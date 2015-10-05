@@ -4,9 +4,11 @@ import gr.indexinsidepdf.lib.PdfProccessManager;
 import gr.indexinsidepdf.lib.storage.IOManager;
 import gr.indexinsidepdf.lib.storage.PdfConfigurationManager;
 import gr.indexinsidepdf.model.PdfNode;
+import gr.softaware.javafx_1_0.controls.dialog.DialogHelper;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.animation.Interpolator;
@@ -102,7 +104,7 @@ public class MainViewController implements Initializable {
         // Check if the scrlocation is a directory.
         File srcFolder = new File(srcLocationTxtField.textProperty().get());
         if (!srcFolder.isDirectory()) {
-            alertError("Η διαδρομή που δώσατε δεν είναι αποδεκτή.");
+            DialogHelper.alertErrorGr("Η διαδρομή που δώσατε δεν είναι αποδεκτή.");
             return;
         }
 
@@ -115,6 +117,7 @@ public class MainViewController implements Initializable {
         // Generate the tree and map the tree to the treeTableView.
         PdfProccessManager.getInstance().generateTree();
         PdfProccessManager.getInstance().buildTreeView();
+        IOManager.getInstance().indexImportedProperty().set(false);
 
         move(StepDirection.FORWARD);
     }
@@ -126,6 +129,7 @@ public class MainViewController implements Initializable {
 
     @FXML
     void step2NextClick(ActionEvent event) {
+        PdfProccessManager.getInstance().createPdf(progressBar, step3ProgressLabel);
         move(StepDirection.FORWARD);
     }
 
@@ -169,7 +173,7 @@ public class MainViewController implements Initializable {
         choose.setTitle("Επιλογή τοποθεσίας για ευρετηρίαση");
         File folder = choose.showDialog(getStage());
         if (folder == null || !folder.isDirectory()) {
-            alertError("Η διαδρομή που δώσατε δεν είναι αποδεκτή.");
+            DialogHelper.alertErrorGr("Η διαδρομή που δώσατε δεν είναι αποδεκτή.");
             return;
         }
 
@@ -183,14 +187,14 @@ public class MainViewController implements Initializable {
         // Get the selected PdfView from the treeTableView.
         TreeItem<PdfNode> selectedItem = treeTableView.getSelectionModel().getSelectedItem();
         if (selectedItem == null) {
-            alertError("Θα πρέπει να επιλέξετε κάποια εγγραφή στον πίνακα.");
+            DialogHelper.alertErrorGr("Θα πρέπει να επιλέξετε κάποια εγγραφή στον πίνακα.");
             return;
         }
         PdfNode node = selectedItem.getValue();
 
         // Move the node up.
         if (!PdfProccessManager.getInstance().moveNodeUp(node)) {
-            alertError("Η εγγραφή δεν μπορεί να μετακινηθεί πιο πάνω.");
+            DialogHelper.alertErrorGr("Η εγγραφή δεν μπορεί να μετακινηθεί πιο πάνω.");
             return;
         }
 
@@ -203,14 +207,14 @@ public class MainViewController implements Initializable {
         // Get the selected PdfView from the treeTableView.
         TreeItem<PdfNode> selectedItem = treeTableView.getSelectionModel().getSelectedItem();
         if (selectedItem == null) {
-            alertError("Θα πρέπει να επιλέξετε κάποια εγγραφή στον πίνακα.");
+            DialogHelper.alertErrorGr("Θα πρέπει να επιλέξετε κάποια εγγραφή στον πίνακα.");
             return;
         }
         PdfNode node = selectedItem.getValue();
 
         // Move the node up.
         if (!PdfProccessManager.getInstance().moveNodeDown(node)) {
-            alertError("Η εγγραφή δεν μπορεί να μετακινηθεί πιο κάτω.");
+            DialogHelper.alertErrorGr("Η εγγραφή δεν μπορεί να μετακινηθεί πιο κάτω.");
             return;
         }
 
@@ -223,7 +227,7 @@ public class MainViewController implements Initializable {
         // Get the selected PdfView from the treeTableView.
         TreeItem<PdfNode> selectedItem = treeTableView.getSelectionModel().getSelectedItem();
         if (selectedItem == null) {
-            alertError("Θα πρέπει να επιλέξετε κάποια εγγραφή στον πίνακα.");
+            DialogHelper.alertErrorGr("Θα πρέπει να επιλέξετε κάποια εγγραφή στον πίνακα.");
             return;
         }
         PdfNode node = selectedItem.getValue();
@@ -247,14 +251,14 @@ public class MainViewController implements Initializable {
         // Get the selected PdfView from the treeTableView.
         TreeItem<PdfNode> selectedItem = treeTableView.getSelectionModel().getSelectedItem();
         if (selectedItem == null) {
-            alertError("Θα πρέπει να επιλέξετε κάποια εγγραφή στον πίνακα.");
+            DialogHelper.alertErrorGr("Θα πρέπει να επιλέξετε κάποια εγγραφή στον πίνακα.");
             return;
         }
         PdfNode node = selectedItem.getValue();
 
         // Check if this node is the root node.
         if (node.equals(PdfProccessManager.getInstance().getTree().getRoot().getData())) {
-            alertError("Ο αρχικός φάκελος δεν επιτρέπεται να διαγραφεί.");
+            DialogHelper.alertErrorGr("Ο αρχικός φάκελος δεν επιτρέπεται να διαγραφεί.");
             return;
         }
 
@@ -441,14 +445,6 @@ public class MainViewController implements Initializable {
     @FXML
     void closeBtnClick(ActionEvent event) {
         getStage().close();
-    }
-
-    private void alertError(String message) {
-        Alert error = new Alert(Alert.AlertType.ERROR);
-        error.setTitle("Πρόβλημα");
-        error.setHeaderText(null);
-        error.setContentText(message);
-        error.show();
     }
 
 }

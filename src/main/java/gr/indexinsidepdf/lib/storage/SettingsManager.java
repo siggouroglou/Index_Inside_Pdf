@@ -14,6 +14,7 @@ public class SettingsManager {
 
     private SettingsManager() {
         settingsModel = new SettingsModel();
+        settingsModel.setFileName("Table_Of_Contents.pdf");
     }
 
     public static SettingsManager getInstance() {
@@ -21,14 +22,6 @@ public class SettingsManager {
             INSTANCE = new SettingsManager();
         }
         return INSTANCE;
-    }
-
-    public static SettingsManager getINSTANCE() {
-        return INSTANCE;
-    }
-
-    public static void setINSTANCE(SettingsManager INSTANCE) {
-        SettingsManager.INSTANCE = INSTANCE;
     }
 
     public boolean isDefaultLocation() {
@@ -45,6 +38,14 @@ public class SettingsManager {
 
     public void setPdfFolderPath(String pdfFolderPath) {
         this.settingsModel.setPdfFolderPath(pdfFolderPath);
+    }
+
+    public String getFileName() {
+        return this.settingsModel.getFileName();
+    }
+
+    public void setFileName(String fileName) {
+        this.settingsModel.setFileName(fileName);
     }
 
 }

@@ -1,4 +1,4 @@
-package gr.softaware.javafx_1_0.validation.old;
+package gr.softaware.javafx_1_0.validation.depricated;
 
 import java.util.Date;
 import java.util.regex.Matcher;

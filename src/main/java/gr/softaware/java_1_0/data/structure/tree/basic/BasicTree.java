@@ -304,6 +304,18 @@ public final class BasicTree<T extends TreeNode> implements TreeCollection<T> {
     /**
      * Runs the tree in preorder. Runs the given strategy each time it is on an
      * item.
+     * 
+     * @param treeOrderStrategy
+     * @return a tree node depending the strategy.
+     * @throws NullPointerException in case of a null argument.
+     */
+    public BasicTreeNode<T> preOrder(TreeOrderContinueStrategy treeOrderStrategy) {
+        return preOrder(root, root, treeOrderStrategy);
+    }
+
+    /**
+     * Runs the tree in preorder. Runs the given strategy each time it is on an
+     * item.
      *
      * @param parent The parent of the current node.
      * @param current The current node.

@@ -16,6 +16,7 @@ import java.lang.reflect.Type;
 import java.util.Optional;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -71,7 +72,7 @@ public final class IOManager {
 
                         @Override
                         public boolean shouldSkipClass(Class<?> aClass) {
-                            return aClass.equals(TreeItem.class);
+                            return aClass.equals(TreeItem.class) || aClass.equals(StringProperty.class);
                         }
                     })
                     .create();
@@ -196,7 +197,7 @@ public final class IOManager {
 
                     @Override
                     public boolean shouldSkipClass(Class<?> aClass) {
-                        return aClass.equals(TreeItem.class);
+                        return aClass.equals(TreeItem.class) || aClass.equals(StringProperty.class);
                     }
                 })
                 .create();

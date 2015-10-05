@@ -1,8 +1,8 @@
-package gr.softaware.javafx_1_0.validation.old;
+package gr.softaware.javafx_1_0.validation.depricated;
 
-import gr.softaware.javafx_1_0.validation.old.model.AttributeToValidateModel;
-import gr.softaware.javafx_1_0.validation.old.model.ModelError;
-import gr.softaware.javafx_1_0.validation.old.model.ValidationConfigurationModel;
+import gr.softaware.javafx_1_0.validation.depricated.model.AttributeToValidateModel;
+import gr.softaware.javafx_1_0.validation.depricated.model.ModelError;
+import gr.softaware.javafx_1_0.validation.depricated.model.ValidationConfigurationModel;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;

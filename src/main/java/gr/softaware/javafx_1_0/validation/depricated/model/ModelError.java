@@ -1,4 +1,4 @@
-package gr.softaware.javafx_1_0.validation.old.model;
+package gr.softaware.javafx_1_0.validation.depricated.model;
 
 /**
  *

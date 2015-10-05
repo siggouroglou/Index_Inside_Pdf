@@ -37,6 +37,8 @@ public class EditSettingsViewController implements Initializable {
 
     @FXML
     private RadioButton indexLocationOtherRadioButton;
+    @FXML
+    private TextField fileNameTextField;
 
     /**
      * Initializes the controller class.
@@ -51,6 +53,7 @@ public class EditSettingsViewController implements Initializable {
         assert locationTextField != null : "fx:id=\"locationTextField\" was not injected: check your FXML file 'EditSettingsView.fxml'.";
         assert indexLocationInsideFolderRadioBtn != null : "fx:id=\"indexLocationInsideFolderRadioBtn\" was not injected: check your FXML file 'EditSettingsView.fxml'.";
         assert indexLocationOtherRadioButton != null : "fx:id=\"indexLocationOtherRadioButton\" was not injected: check your FXML file 'EditSettingsView.fxml'.";
+        assert fileNameTextField != null : "fx:id=\"fileNameTextField\" was not injected: check your FXML file 'EditSettingsView.fxml'.";
 
         // Binding.
         locationHbox.disableProperty().bind(Bindings.not(indexLocationOtherRadioButton.selectedProperty()));
@@ -59,6 +62,7 @@ public class EditSettingsViewController implements Initializable {
         indexLocationInsideFolderRadioBtn.selectedProperty().set(SettingsManager.getInstance().isDefaultLocation());
         indexLocationOtherRadioButton.selectedProperty().set(!SettingsManager.getInstance().isDefaultLocation());
         locationTextField.textProperty().set(SettingsManager.getInstance().getPdfFolderPath());
+        fileNameTextField.textProperty().set(SettingsManager.getInstance().getFileName());
     }
 
     private Stage getStage() {
@@ -87,6 +91,7 @@ public class EditSettingsViewController implements Initializable {
     void saveClick(ActionEvent event) {
         SettingsManager.getInstance().setDefaultLocation(indexLocationInsideFolderRadioBtn.selectedProperty().get());
         SettingsManager.getInstance().setPdfFolderPath(locationTextField.textProperty().get());
+        SettingsManager.getInstance().setFileName(fileNameTextField.textProperty().get());
         
         getStage().close();
     }
