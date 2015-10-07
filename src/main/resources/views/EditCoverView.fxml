@@ -38,7 +38,7 @@
                                                 <VBox HBox.hgrow="ALWAYS">
                                                    <children>
                                                       <Label text="Ημ/νια Εναρξης" />
-                                                      <TextField fx:id="startDateTextField" promptText="HH.MM.EEEE" />
+                                                      <TextField fx:id="startDateTextField" />
                                                    </children>
                                                 </VBox>
                                              </children>

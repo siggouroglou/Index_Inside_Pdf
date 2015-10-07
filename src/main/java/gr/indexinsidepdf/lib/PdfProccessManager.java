@@ -267,11 +267,12 @@ public class PdfProccessManager {
         }
     }
 
-    public void createPdf(final ProgressBar progressBar, final Label step3ProgressLabel) {
+    public void createPdf(final ProgressBar progressBar, final Label step3ProgressLabel, final Label progressResultLabel) {
         PdfFile pdfFile = new PdfFile.PdfFileBuilder()
                 .tree(tree)
                 .progressBar(progressBar)
                 .progressLabel(step3ProgressLabel)
+                .progressResultLabel(progressResultLabel)
                 .build();
         pdfFile.create();
     }

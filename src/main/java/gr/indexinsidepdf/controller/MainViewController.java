@@ -8,7 +8,6 @@ import gr.softaware.javafx_1_0.controls.dialog.DialogHelper;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.animation.Interpolator;
@@ -20,7 +19,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
@@ -129,7 +127,7 @@ public class MainViewController implements Initializable {
 
     @FXML
     void step2NextClick(ActionEvent event) {
-        PdfProccessManager.getInstance().createPdf(progressBar, step3ProgressLabel);
+        PdfProccessManager.getInstance().createPdf(progressBar, step3ProgressLabel, step3ResultLabel);
         move(StepDirection.FORWARD);
     }
 

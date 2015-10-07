@@ -154,8 +154,8 @@
                               <Insets top="50.0" />
                            </VBox.margin>
                         </ProgressBar>
-                        <Label fx:id="step3ProgressLabel" styleClass="title-description" text="20% - Αναγνωρη ρυμισεων.." />
-                        <Label fx:id="step3ResultLabel" styleClass="title-norm" text="Το ευρετηριο ετοιμαζεται">
+                        <Label fx:id="step3ProgressLabel" styleClass="title-description" text="" />
+                        <Label fx:id="step3ResultLabel" styleClass="title-norm">
                            <VBox.margin>
                               <Insets top="30.0" />
                            </VBox.margin>
