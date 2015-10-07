@@ -193,7 +193,6 @@ public class PdfFile extends SoftawarePdfDocument {
 
                 // Create Custom Font.
                 arialBaseFont = BaseFont.createFont("files/fonts/arialuni.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-//                arialBaseFont = BaseFont.createFont("files/fonts/arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
                 arialBoldBaseFont = BaseFont.createFont("files/fonts/arialunibd.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
                 // Update process bar.
@@ -457,15 +456,15 @@ public class PdfFile extends SoftawarePdfDocument {
                 if (node.getFileType() == FileType.DIRECTORY) {
                     paragraph.add(element);
                 } else if (node.getFileType() == FileType.FILE) {
-//                        Anchor anchor = new Anchor(new Phrase(node.getTitle(), font));
                     String url = getRelativePath(node.getFile().getAbsolutePath(), tree.getRoot().getData().getFile().getAbsolutePath());
+//                        Anchor anchor = new Anchor(new Phrase(node.getTitle(), font));
 //                        String reference;
 //                        try {
 //                            reference = URIUtil.encodeQuery(url);
 //                            anchor.setReference(reference);
 //                        } catch (URIException ex) {
 //                        }
-//                        Chunk chunk = new Chunk(node.getTitle(), font);
+//                        Chunk element = new Chunk(node.getTitle(), font);
                     element.setAnchor(url);
                     paragraph.add(element);
                 }

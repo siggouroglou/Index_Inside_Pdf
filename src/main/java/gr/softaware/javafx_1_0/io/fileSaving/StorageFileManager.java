@@ -10,7 +10,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -343,14 +342,14 @@ public class StorageFileManager {
      * clicks on the YES button then the save method is invoked.
      *
      * @param stageParent The parent stage for the modal.
-     * 
+     *
      * @throws NullPointerException in case of a null stage.
      */
     public void questionForSave(Stage stageParent) {
-        if(stageParent == null){
+        if (stageParent == null) {
             throw new NullPointerException("Argument must not be null");
         }
-        
+
         // Create the buttons.
         ButtonType yesButton = new ButtonType(questionForSaveYesButtonText, ButtonData.OK_DONE);
         ButtonType noButton = new ButtonType(questionForSaveNoButtonText, ButtonData.CANCEL_CLOSE);
@@ -371,18 +370,23 @@ public class StorageFileManager {
 
     /**
      * Select a file if there is not selected yet and save the changes using the
-     * StorageFileManagerStrategy. In case the file is not existing create it.
+     * StorageFileManagerStrategy.
+     *
+     * <p>
+     * In case the file is not existing this method creates it. Also, if the
+     * user press cancel on the file chooser this method does not save the
+     * file.</p>
      *
      * @param stageParent The parent stage of this modal.
      *
-     * @throws NullPointerException in case of a null stage or file.
+     * @throws NullPointerException if the stage or the file property is null.
      */
     public void save(Stage stageParent) {
         if (stageParent == null) {
             throw new NullPointerException("Argument stageParent must not be null.");
         }
         if (file == null) {
-            throw new NullPointerException("The state of this object i not correct. The file property must not be null.");
+            throw new NullPointerException("The state of this object is not correct. The file property must not be null.");
         }
 
         // Has user selected a file.
@@ -394,7 +398,10 @@ public class StorageFileManager {
                 choose.getExtensionFilters().addAll(extensionFilters);
             }
             file = choose.showOpenDialog(stageParent);
-            if (file == null || !file.isFile()) {
+            if (file == null) {
+                return;
+            }
+            if (!file.isFile()) {
                 try {
                     FileUtils.touch(file);
                 } catch (IOException ex) {
@@ -413,43 +420,41 @@ public class StorageFileManager {
     }
 
     /**
-     * Save to the given path using the StorageFileManagerStrategy. In case the
-     * filePath is not existing create it. <br/>
-     * This method checks the arguments and runs the save(stage, file) method.
+     * Save to the given path using the StorageFileManagerStrategy.
      *
-     * @param stageParent The parent stage of this modal.
+     * <p>
+     * In case the filePath is not existing this method creates it. <br/>
+     * This method checks the arguments and runs the save(file) method.
+     * </p>
+     *
      * @param filePath The path to the file that will be used for saving. This
      * file path will be stored to the object for further use.
      *
-     * @throws NullPointerException in case of a null arguments.
+     * @throws NullPointerException if the filePath is null.
      */
-    public void save(Stage stageParent, String filePath) {
-        if (stageParent == null) {
-            throw new NullPointerException("Argument stageParent must not be null.");
-        }
+    public void save(String filePath) {
         if (filePath == null) {
             throw new NullPointerException("Argument filePath must not be null.");
         }
 
-        save(stageParent, new File(filePath));
+        save(new File(filePath));
     }
 
     /**
-     * Save to file given and use the StorageFileManagerStrategy. In case the
-     * file is not existing create it.
+     * Save to file given and use the StorageFileManagerStrategy.
      *
-     * @param stageParent The parent stage of this modal.
+     * <p>
+     * In case the file is not existing this method creates it.
+     * </p>
+     *
      * @param newFile The file to use to save. This file will be saved for
-     * further saving.
+     * further usage as property of this object.
      *
-     * @throws NullPointerException in case of a null stage or file.
-     * @throws IllegalArgumentException in case of the given file is a directory
-     * etc but not a file.
+     * @throws NullPointerException if a null stage or file.
+     * @throws IllegalArgumentException if the given file is not existing or it
+     * is a directory etc but not a file.
      */
-    public void save(Stage stageParent, File newFile) {
-        if (stageParent == null) {
-            throw new NullPointerException("Argument stageParent must not be null.");
-        }
+    public void save(File newFile) {
         if (newFile == null) {
             throw new NullPointerException("Argument newFile must not be null.");
         }
@@ -477,18 +482,19 @@ public class StorageFileManager {
     }
 
     /**
-     * Select a file to save and this file will be used for later saving and
-     * save the changes using the StorageFileManagerStrategy.
+     * Opens a file chooser and when the user selects a file then this method
+     * uses (creates it in case of this file is not existing) as the main file
+     * and runs the strategy.
      *
      * @param stageParent The parent stage of this modal.
      *
-     * @throws NullPointerException in case of a null stage.
+     * @throws NullPointerException if stage is null.
      */
     public void saveAs(Stage stageParent) {
         if (stageParent == null) {
             throw new NullPointerException("Argument stageParent must not be null.");
         }
-        
+
         // Select the file to save to.
         FileChooser choose = new FileChooser();
         choose.setTitle(saveAsFileChooserTitle);
@@ -496,7 +502,14 @@ public class StorageFileManager {
             choose.getExtensionFilters().addAll(extensionFilters);
         }
         file = choose.showOpenDialog(stageParent);
-        if (file == null || !file.isFile()) {
+
+        // Check if something selected.
+        if (file == null) {
+            return;
+        }
+
+        // Check if it is a file. If it is not then create it.
+        if (!file.exists()) {
             try {
                 FileUtils.touch(file);
             } catch (IOException ex) {
@@ -514,15 +527,26 @@ public class StorageFileManager {
     }
 
     /**
-     * Select a file and put the path to a TextInputControl. Returns the full
-     * path or in case of error null.
+     * Select a file and put the path to a TextInputControl returning the file
+     * selected.
+     *
+     * <p>
+     * Returns the file selected in case the user selected a file. In case the
+     * textInputControl is not null, sets the path to this input. If user didn't
+     * selected something returns null.</p>
      *
      * @param stageParent The parent stage of this modal.
      * @param textField a TextInputControl that will get the absolute path as
-     * text.
-     * @return the full path or in case of error null.
+     * text or null if there is no input control.
+     * @return the file selected or in case of nothing selected null.
+     *
+     * @throws NullPointerException if the parent stage is null.
      */
-    public String selectFile(Stage stageParent, TextInputControl textField) {
+    public File selectFile(Stage stageParent, TextInputControl textField) {
+        if (stageParent == null) {
+            throw new NullPointerException("Argument stageParent must not be null.");
+        }
+
         // Select the file.
         FileChooser choose = new FileChooser();
         choose.setTitle(selectFileChooserTitle);
@@ -530,19 +554,79 @@ public class StorageFileManager {
             choose.getExtensionFilters().addAll(extensionFilters);
         }
         file = choose.showOpenDialog(stageParent);
-        if (file == null || !file.isFile()) {
+
+        // Check if something selected.
+        if (file == null) {
             return null;
         }
 
-        // Get the full path.
-        String filePath = file.getAbsolutePath();
-
         // Fill the file name to the text field.
         if (textField != null) {
+            // Get the full path and update the text of the textInputControl.
+            String filePath = file.getAbsolutePath();
             textField.setText(filePath);
         }
 
         // Return the full path.
-        return filePath;
+        return file;
+    }
+
+    /**
+     * Select a file (or creates it if it not extisting) and put the path to a
+     * TextInputControl returning the file selected.
+     *
+     * <p>
+     * Returns the file selected in case the user selected a file. In case the
+     * textInputControl is not null, sets the path to this input. If user didn't
+     * selected something returns null.</p>
+     *
+     * @param stageParent The parent stage of this modal.
+     * @param textField a TextInputControl that will get the absolute path as
+     * text or null if there is no input control.
+     * @return the file selected or in case of nothing selected null.
+     *
+     * @throws NullPointerException if the parent stage is null.
+     */
+    public File selectAndCreateFile(Stage stageParent, TextInputControl textField) {
+        if (stageParent == null) {
+            throw new NullPointerException("Argument stageParent must not be null.");
+        }
+
+        // Select the file.
+        FileChooser choose = new FileChooser();
+        choose.setTitle(selectFileChooserTitle);
+        if (extensionFilters != null) {
+            choose.getExtensionFilters().addAll(extensionFilters);
+        }
+        file = choose.showOpenDialog(stageParent);
+
+        // Check if something selected.
+        if (file == null) {
+            return null;
+        }
+
+        // Check if it is a file. If it is not then create it.
+        if (!file.exists()) {
+            try {
+                FileUtils.touch(file);
+            } catch (IOException ex) {
+                Alert error = new Alert(Alert.AlertType.ERROR);
+                error.setTitle(errorTitle);
+                error.setHeaderText(errorHeader);
+                error.setContentText(errorText == null ? ex.getMessage() : errorText);
+                error.show();
+                return null;
+            }
+        }
+
+        // Fill the file name to the text field.
+        if (textField != null) {
+            // Get the full path and update the text of the textInputControl.
+            String filePath = file.getAbsolutePath();
+            textField.setText(filePath);
+        }
+
+        // Return the full path.
+        return file;
     }
 }

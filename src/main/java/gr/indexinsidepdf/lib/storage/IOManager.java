@@ -10,6 +10,7 @@ import gr.indexinsidepdf.model.CoverModel;
 import gr.indexinsidepdf.model.PdfNode;
 import gr.softaware.java_1_0.data.structure.tree.basic.BasicTreeNode;
 import gr.softaware.javafx_1_0.io.fileSaving.StorageFileManager;
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
@@ -136,37 +137,27 @@ public final class IOManager {
         }
     }
 
-    public void saveCover(Stage stage, String filePath) {
-        coverFile.save(stage, filePath);
+    public void saveCover(String filePath) {
+        coverFile.save(filePath);
         coverSavedProperty().set(true);
     }
 
-    public void saveIndex(Stage stage, String filePath) {
-        indexFile.save(stage, filePath);
+    public void saveIndex(String filePath) {
+        indexFile.save(filePath);
         indexSavedProperty().set(true);
     }
 
     public void chooseCoverFile(Stage stage, TextField textField) {
-        String fullPath = coverFile.selectFile(stage, textField);
-
-        if (fullPath == null) {
-            Alert error = new Alert(Alert.AlertType.ERROR);
-            error.setTitle("Πρόβλημα");
-            error.setHeaderText(null);
-            error.setContentText("Το αρχείο που δώσατε δεν είναι αποδεκτό.");
-            error.show();
+        File file = coverFile.selectFile(stage, textField);
+        if (file == null) {
+            return;
         }
     }
 
     public void chooseIndexFile(Stage stage, TextField textField) {
-        String fullPath = indexFile.selectFile(stage, textField);
-
-        if (fullPath == null) {
-            Alert error = new Alert(Alert.AlertType.ERROR);
-            error.setTitle("Πρόβλημα");
-            error.setHeaderText(null);
-            error.setContentText("Το αρχείο που δώσατε δεν είναι αποδεκτό.");
-            error.show();
+        File file = indexFile.selectFile(stage, textField);
+        if (file == null) {
+            return;
         }
     }
 

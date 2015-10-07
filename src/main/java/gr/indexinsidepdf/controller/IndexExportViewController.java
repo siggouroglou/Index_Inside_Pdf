@@ -48,7 +48,7 @@ public class IndexExportViewController implements Initializable {
 
     @FXML
     void exportClick(ActionEvent event) {
-        IOManager.getInstance().saveIndex(getStage(), locationTextField.textProperty().get());
+        IOManager.getInstance().saveIndex(locationTextField.textProperty().get());
         getStage().close();
     }
 

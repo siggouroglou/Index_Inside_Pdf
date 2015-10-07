@@ -48,7 +48,7 @@ public class CoverExportViewController implements Initializable {
 
     @FXML
     void exportClick(ActionEvent event) {
-        IOManager.getInstance().saveCover(getStage(), locationTextField.textProperty().get());
+        IOManager.getInstance().saveCover(locationTextField.textProperty().get());
         getStage().close();
     }
 

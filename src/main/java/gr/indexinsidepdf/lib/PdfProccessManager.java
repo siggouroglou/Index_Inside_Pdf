@@ -8,19 +8,17 @@ import gr.softaware.java_1_0.data.structure.tree.basic.TreeOrderingOutput;
 import gr.softaware.java_1_0.data.types.FileType;
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import static javafx.beans.binding.Bindings.max;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.concurrent.Task;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableColumn.CellDataFeatures;
 import javafx.scene.control.TreeTableView;
+import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -71,13 +69,16 @@ public class PdfProccessManager {
         // Generate the tree to fill with files.
         tree = new BasicTree(rootNode);
 
-        // Fill the tree.
-        readFileSystem(rootFile);
+        try {
+            // Fill the tree.
+            readFileSystem(rootFile);
+        } catch (IOException ex) {
+        }
 
         return tree;
     }
 
-    private void readFileSystem(File rootDirectory) {
+    private void readFileSystem(File rootDirectory) throws IOException {
         // The filename filter.
         FilenameFilter filenameFilter = (File file, String name) -> {
             return name.toLowerCase().endsWith(".pdf") || file.isDirectory();
@@ -89,6 +90,10 @@ public class PdfProccessManager {
 
         // Raad recurcively.
         for (File file : rootDirectory.listFiles(filenameFilter)) {
+            // Check if this is a link of something else than directory or file.
+            if (FileUtils.isSymlink(file) || (!file.isDirectory() && !file.isFile())) {
+                continue;
+            }
             // Create the child tree parentTreeItem if id doesn't exist.
             PdfNode childNode = new PdfNode();
             childNode.setFile(file);
@@ -256,8 +261,11 @@ public class PdfProccessManager {
         // Get selected model.
         TreeItem<PdfNode> selectedItem = treeTableView.getSelectionModel().getSelectedItem();
 
-        // Read the file system again to find any new node and add it to the trees.
-        readFileSystem(tree.getRoot().getData().getFile());
+        try {
+            // Read the file system again to find any new node and add it to the trees.
+            readFileSystem(tree.getRoot().getData().getFile());
+        } catch (IOException ex) {
+        }
         buildTreeView();
 
         // Select again the item that was selected.
@@ -276,8 +284,8 @@ public class PdfProccessManager {
                 .build();
         pdfFile.create();
     }
-    
-    public void createPdfResult(List<PdfNode> brokenNodes){
-        
+
+    public void createPdfResult(List<PdfNode> brokenNodes) {
+
     }
 }

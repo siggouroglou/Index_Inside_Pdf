@@ -170,7 +170,10 @@ public class MainViewController implements Initializable {
         DirectoryChooser choose = new DirectoryChooser();
         choose.setTitle("Επιλογή τοποθεσίας για ευρετηρίαση");
         File folder = choose.showDialog(getStage());
-        if (folder == null || !folder.isDirectory()) {
+        if (folder == null) {
+            return;
+        }
+        if (!folder.isDirectory()) {
             DialogHelper.alertErrorGr("Η διαδρομή που δώσατε δεν είναι αποδεκτή.");
             return;
         }
