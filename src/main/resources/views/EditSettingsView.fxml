@@ -21,7 +21,10 @@
                   <Label styleClass="title-description" text="Σε αυτο το παραθυρο μπορειτε να επεξεργαστειτε τις γενικες ρυθμισεις του προγραμματος." wrapText="true" />
                   <VBox>
                      <children>
-                        <Label text="Αποθηκευση ευρετηριου," />
+                        <Label text="Αποθηκευση ευρετηριου,">
+                           <tooltip>
+                              <Tooltip text="Επιλεξτε εαν το τελικο ευρετηριο(pdf) θα αποθηκευεται μεσα στο φακελο που βρισκεται η δομη, η σε αλλη τοποθεσια. Τα link του ευρετηριου λειτουργουν μονο μεσα στη δομη." />
+                           </tooltip></Label>
                         <RadioButton fx:id="indexLocationInsideFolderRadioBtn" mnemonicParsing="false" selected="true" text="Στην τοποθεσια του φακελου">
                            <toggleGroup>
                               <ToggleGroup fx:id="IndexLocationGroup" />
@@ -31,7 +34,10 @@
                         <HBox fx:id="locationHbox" spacing="5.0">
                            <children>
                               <TextField fx:id="locationTextField" HBox.hgrow="ALWAYS" />
-                              <Button mnemonicParsing="false" onAction="#searchLocationClick" text="Αναζητηση" />
+                              <Button mnemonicParsing="false" onAction="#searchLocationClick" text="Αναζητηση">
+                                 <tooltip>
+                                    <Tooltip text="Επιλεξτε την τοποθεσια που θα αποθηκευται το ευρετηριο." />
+                                 </tooltip></Button>
                            </children>
                            <VBox.margin>
                               <Insets left="25.0" />
@@ -47,7 +53,10 @@
                         <Insets top="20.0" />
                      </VBox.margin>
                      <children>
-                        <Label text="Ονομα Αρχειου Ευρετηριου" />
+                        <Label text="Ονομα Αρχειου Ευρετηριου">
+                           <tooltip>
+                              <Tooltip text="Επιλεξτε το ονομα του αρχειου στο οποιο θα αποθηκευτει το ευρετηριο. Θα πρεπει το ονομα του αρχειου να εχει καταληξη &quot;.pdf&quot;." />
+                           </tooltip></Label>
                         <TextField fx:id="fileNameTextField" />
                      </children>
                   </VBox>
@@ -57,8 +66,14 @@
          <bottom>
             <HBox alignment="CENTER_RIGHT" spacing="5.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button mnemonicParsing="false" onAction="#cancelClick" text="Ακυρο" />
-                  <Button mnemonicParsing="false" onAction="#saveClick" text="Αποθηκευση" />
+                  <Button mnemonicParsing="false" onAction="#cancelClick" text="Ακυρο">
+                     <tooltip>
+                        <Tooltip text="Κλεισιμο του παραθυρου χωρις την αποθηκευση των αλλαγων που κανατε." />
+                     </tooltip></Button>
+                  <Button mnemonicParsing="false" onAction="#saveClick" text="Αποθηκευση">
+                     <tooltip>
+                        <Tooltip text="Κλεισιμο του παραθυρου και αποθηκευση των αλλαγων." />
+                     </tooltip></Button>
                </children>
             </HBox>
          </bottom>

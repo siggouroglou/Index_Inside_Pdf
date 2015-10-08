@@ -120,7 +120,7 @@ public class PdfProccessManager {
             String filename = file.getName();
             int dotIndex = filename.lastIndexOf(".");
 
-            return filename.substring(0, (dotIndex < 0 ? (int) file.length() - 1 : dotIndex));
+            return filename.substring(0, (dotIndex < 0 ? (int) filename.length() - 1 : dotIndex));
         }
 
         throw new IllegalArgumentException("Only directory or folred are allowed.");

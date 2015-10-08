@@ -30,7 +30,10 @@
                               <TextField fx:id="locationTextField" />
                            </children>
                         </VBox>
-                        <Button mnemonicParsing="false" onAction="#scrLocationSearchClick" text="Αναζητηση" />
+                        <Button mnemonicParsing="false" onAction="#scrLocationSearchClick" text="Αναζητηση">
+                           <tooltip>
+                              <Tooltip text="Επιλογη του αρχειο στο οποιο θελετε να εξαγετε τις τρεχουσες ρυθμισεις ευρετηριου." />
+                           </tooltip></Button>
                      </children>
                      <VBox.margin>
                         <Insets top="20.0" />
@@ -42,8 +45,14 @@
          <bottom>
             <HBox alignment="CENTER_RIGHT" spacing="5.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button mnemonicParsing="false" onAction="#closeClick" text="Κλεισιμο" />
-                  <Button fx:id="exportButton" mnemonicParsing="false" onAction="#exportClick" text="Εξαγωγη" />
+                  <Button mnemonicParsing="false" onAction="#closeClick" text="Κλεισιμο">
+                     <tooltip>
+                        <Tooltip text="Κλεισιμο του παραθυρου χωρις να γινει καποια αλλαγη." />
+                     </tooltip></Button>
+                  <Button fx:id="exportButton" mnemonicParsing="false" onAction="#exportClick" text="Εξαγωγη">
+                     <tooltip>
+                        <Tooltip text="Κλεισιμο του παραθυρου και εξαγωγη των ρυθμισεων στο αρχειο που επιλεξατε. Το αρχειο αν δεν υπαρχει, θα δημιουργηθει." />
+                     </tooltip></Button>
                </children>
             </HBox>
          </bottom>

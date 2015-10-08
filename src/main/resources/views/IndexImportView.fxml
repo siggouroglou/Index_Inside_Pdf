@@ -35,7 +35,10 @@
                               <TextField fx:id="locationTextField" />
                            </children>
                         </VBox>
-                        <Button mnemonicParsing="false" onAction="#scrLocationSearchClick" text="Αναζητηση" />
+                        <Button mnemonicParsing="false" onAction="#scrLocationSearchClick" text="Αναζητηση">
+                           <tooltip>
+                              <Tooltip text="Επιλογη του αρχειου στο οποιο εχετε εξαγει ρυθμισεις ευρετηριου." />
+                           </tooltip></Button>
                      </children>
                      <VBox.margin>
                         <Insets top="20.0" />
@@ -47,8 +50,14 @@
          <bottom>
             <HBox alignment="CENTER_RIGHT" spacing="5.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button mnemonicParsing="false" onAction="#closeClick" text="Κλεισιμο" />
-                  <Button fx:id="importButton" mnemonicParsing="false" onAction="#importClick" text="Εισαγωγη" />
+                  <Button mnemonicParsing="false" onAction="#closeClick" text="Κλεισιμο">
+                     <tooltip>
+                        <Tooltip text="Κλεισιμο του παραθυρου χωρις να γινει καποια αλλαγη." />
+                     </tooltip></Button>
+                  <Button fx:id="importButton" mnemonicParsing="false" onAction="#importClick" text="Εισαγωγη">
+                     <tooltip>
+                        <Tooltip text="Κλεισιμο του παραθυρου και εισαγωγη των ρυθμισεων στο προγραμμα." />
+                     </tooltip></Button>
                </children>
                <BorderPane.margin>
                   <Insets top="20.0" />

@@ -31,13 +31,19 @@
                                              <children>
                                                 <VBox HBox.hgrow="ALWAYS">
                                                    <children>
-                                                      <Label text="Τιτλος Εναρξης" />
+                                                      <Label text="Τιτλος Εναρξης">
+                                                         <tooltip>
+                                                            <Tooltip text="Το κειμενο που θα εμφανιζεται με bold γραμματοσειρα ως τιτλος του εγγραφου." />
+                                                         </tooltip></Label>
                                                       <TextField fx:id="startTitleTextField" />
                                                    </children>
                                                 </VBox>
                                                 <VBox HBox.hgrow="ALWAYS">
                                                    <children>
-                                                      <Label text="Ημ/νια Εναρξης" />
+                                                      <Label text="Ημ/νια Εναρξης">
+                                                         <tooltip>
+                                                            <Tooltip text="Η ημερομηνια εναρξης που εμφανιζεται κατω απο τον τιτλο του εγγραφου. Αν παραληφει δεν εμφανιζεται καθολου η γραμμη αυτη." />
+                                                         </tooltip></Label>
                                                       <TextField fx:id="startDateTextField" />
                                                    </children>
                                                 </VBox>
@@ -47,7 +53,10 @@
                                              <children>
                                                 <VBox HBox.hgrow="ALWAYS">
                                                    <children>
-                                                      <Label text="Χρημ. Ποσο" />
+                                                      <Label text="Χρημ. Ποσο">
+                                                         <tooltip>
+                                                            <Tooltip text="Το χρηματικο ποσο που εμφανιζεται κατω απο την ημερομηνια. Αν παραληφει δεν εμφανιζεται καθολου η γραμμη αυτη." />
+                                                         </tooltip></Label>
                                                       <TextField fx:id="startAmmountTextField" />
                                                    </children>
                                                 </VBox>
@@ -58,7 +67,10 @@
                                              <children>
                                                 <VBox HBox.hgrow="ALWAYS">
                                                    <children>
-                                                      <Label text="Τιτλος Ληξης" />
+                                                      <Label text="Τιτλος Ληξης">
+                                                         <tooltip>
+                                                            <Tooltip text="Ο τιτλος που υπαρχει στο κατω μερος του εξωφυλλου." />
+                                                         </tooltip></Label>
                                                       <TextField fx:id="endTitleTextField" />
                                                    </children>
                                                 </VBox>
@@ -67,7 +79,10 @@
                                           </HBox>
                                           <VBox>
                                              <children>
-                                                <Label text="Κειμενο Ληξης" />
+                                                <Label text="Κειμενο Ληξης">
+                                                   <tooltip>
+                                                      <Tooltip text="Το κειμενο που υπαρχει στο κατω μερος του εξωφυλλου. Για style βαλτε γυρω απο το κειμενο σας *-&gt;italic, **-&gt;bold, ***-&gt;bold&amp;italic." />
+                                                   </tooltip></Label>
                                                 <TextArea fx:id="endTextTextArea" prefHeight="200.0" prefWidth="200.0" />
                                              </children>
                                           </VBox>
@@ -91,7 +106,10 @@
                                        <children>
                                           <VBox HBox.hgrow="ALWAYS">
                                              <children>
-                                                <Button mnemonicParsing="false" onAction="#addBetweenClick" text="+ Προσθηκη 'Between'" />
+                                                <Button mnemonicParsing="false" onAction="#addBetweenClick" text="+ Προσθηκη 'Between'">
+                                                   <tooltip>
+                                                      <Tooltip text="Προσθηκη μιας εγγραφης Between." />
+                                                   </tooltip></Button>
                                                 <VBox fx:id="betweenContainer" spacing="8.0">
                                                    <VBox.margin>
                                                       <Insets top="5.0" />
@@ -101,7 +119,10 @@
                                           </VBox>
                                           <VBox alignment="TOP_RIGHT" HBox.hgrow="ALWAYS">
                                              <children>
-                                                <Button mnemonicParsing="false" onAction="#addLenderClick" text="+ Προσθηκη 'Lender'" />
+                                                <Button mnemonicParsing="false" onAction="#addLenderClick" text="+ Προσθηκη 'Lender'">
+                                                   <tooltip>
+                                                      <Tooltip text="Προσθηκη μιας εγγραφης Lender." />
+                                                   </tooltip></Button>
                                                 <VBox fx:id="lenderContainer" alignment="TOP_RIGHT" spacing="8.0">
                                                    <VBox.margin>
                                                       <Insets top="5.0" />
@@ -129,8 +150,14 @@
          <bottom>
             <HBox alignment="CENTER_RIGHT" spacing="5.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button mnemonicParsing="false" onAction="#cancelClick" text="Κλεισιμο" />
-                  <Button mnemonicParsing="false" onAction="#saveClick" text="Αποθηκευση" />
+                  <Button mnemonicParsing="false" onAction="#cancelClick" text="Κλεισιμο">
+                     <tooltip>
+                        <Tooltip text="Κλεισιμο του παραθυρου χωρις την αποθηκευση των αλλαγων που κανατε." />
+                     </tooltip></Button>
+                  <Button mnemonicParsing="false" onAction="#saveClick" text="Αποθηκευση">
+                     <tooltip>
+                        <Tooltip text="Κλεισιμο του παραθυρου και αποθηκευση των αλλαγων." />
+                     </tooltip></Button>
                </children>
             </HBox>
          </bottom>

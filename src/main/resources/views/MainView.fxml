@@ -42,7 +42,10 @@
             </MenuBar>
             <HBox alignment="CENTER_RIGHT" prefHeight="30.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#closeBtnClick" text="Κλεισιμο" />
+                  <Button mnemonicParsing="false" onAction="#closeBtnClick" text="Κλεισιμο">
+                     <tooltip>
+                        <Tooltip text="Κλεισιμο του προγραμματος. Οι ρυθμισεις που εχετε κανει και δεν εχετε εξαγει χανονται." />
+                     </tooltip></Button>
                </children>
                <VBox.margin>
                   <Insets top="526.0" />
@@ -77,15 +80,21 @@
                               <VBox HBox.hgrow="ALWAYS">
                                  <children>
                                     <Label text="Τοποθεσια Φακελου" />
-                                    <TextField fx:id="srcLocationTxtField" text="/home/siggouroglou/Documents/Dropbox/softaware.gr/projects/rigoutsos/Equinox" />
+                                    <TextField fx:id="srcLocationTxtField" />
                                  </children>
                               </VBox>
-                              <Button mnemonicParsing="false" onAction="#srcLocationSearchClick" text="Αναζητηση" />
+                              <Button mnemonicParsing="false" onAction="#srcLocationSearchClick" text="Αναζητηση">
+                                 <tooltip>
+                                    <Tooltip text="Επιλογη του φακελου στον οποιο υπαρχει η δομη για την οποια θελετε να κατασκευασετε ευρετηριο. Η δομη αυτη θα πρεπει να εχει το πολυ 4 επιπεδα βαθος." />
+                                 </tooltip></Button>
                            </children>
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" prefHeight="30.0">
                            <children>
-                              <Button fx:id="step1NextButton" mnemonicParsing="false" onAction="#step1NextClick" text="Επομενο &gt;" />
+                              <Button fx:id="step1NextButton" mnemonicParsing="false" onAction="#step1NextClick" text="Επομενο &gt;">
+                                 <tooltip>
+                                    <Tooltip text="Κατασκευη και προβολη της δομης των φακελων και των αρχειων pdf για τη διαδρομη που επιλεξατε." />
+                                 </tooltip></Button>
                            </children>
                            <VBox.margin>
                               <Insets top="322.0" />
@@ -112,20 +121,44 @@
                               </TreeTableView>
                               <VBox alignment="TOP_CENTER" spacing="10.0">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#step2UpClick" prefWidth="115.0" text="Πανω" />
-                                    <Button mnemonicParsing="false" onAction="#step2DownClick" prefWidth="115.0" text="Κατω" />
-                                    <Button mnemonicParsing="false" onAction="#step2RenameClick" prefWidth="115.0" text="Μετονομασια" />
-                                    <Button mnemonicParsing="false" onAction="#step2RemoveClick" prefWidth="115.0" text="Αφαιρεση" />
+                                    <Button mnemonicParsing="false" onAction="#step2UpClick" prefWidth="115.0" text="Πανω">
+                                       <tooltip>
+                                          <Tooltip text="Επιλεξτε ενα κομβο και κανοντας κλικ σε αυτο το κουμπι μπορειτε να του αλλαξετε θεση προς τα επανω." />
+                                       </tooltip></Button>
+                                    <Button mnemonicParsing="false" onAction="#step2DownClick" prefWidth="115.0" text="Κατω">
+                                       <tooltip>
+                                          <Tooltip text="Επιλεξτε ενα κομβο και κανοντας κλικ σε αυτο το κουμπι μπορειτε να του αλλαξετε θεση προς τα κατω." />
+                                       </tooltip></Button>
+                                    <Button mnemonicParsing="false" onAction="#step2RenameClick" prefWidth="115.0" text="Μετονομασια">
+                                       <tooltip>
+                                          <Tooltip text="Επιλεξτε ενα κομβο και κανοντας κλικ σε αυτο το κουμπι μπορειτε να του αλλαξετε το ονομα με το οποιο θα εμφανιζεται στο ευρετηριο." />
+                                       </tooltip></Button>
+                                    <Button mnemonicParsing="false" onAction="#step2RemoveClick" prefWidth="115.0" text="Αφαιρεση">
+                                       <tooltip>
+                                          <Tooltip text="Επιλεξτε ενα κομβο και κανοντας κλικ σε αυτο το κουμπι μπορειτε να τον αφαιρεσεται απο το ευρετηριο. Αυτο το κουμπι δεν διαγραφει το pdf αρχειο." />
+                                       </tooltip></Button>
                                  </children>
                               </VBox>
                            </children>
                         </HBox>
                         <HBox spacing="10.0">
                            <children>
-                              <Button fx:id="step2RefreshTreeButton" mnemonicParsing="false" onAction="#step2RefreshTreeClick" text="Ανανεωση" />
-                              <Button fx:id="step2ExportIndexButton" mnemonicParsing="false" onAction="#step2ExportIndexClick" text="Εξαγωγη" />
-                              <Button mnemonicParsing="false" onAction="#step2ImportIndexClick" text="Εισαγωγη" />
-                              <Button mnemonicParsing="false" onAction="#step2CoverSettingsClick" text="Ρυθμιση Εξωφυλλου" />
+                              <Button fx:id="step2RefreshTreeButton" mnemonicParsing="false" onAction="#step2RefreshTreeClick" text="Ανανεωση">
+                                 <tooltip>
+                                    <Tooltip text="Ανανεωνεται το δεντρο με προσθηκη των νεων αρχειων. Δεν επιρρεαζονται οι κομβοι που υπαρχουν." />
+                                 </tooltip></Button>
+                              <Button fx:id="step2ExportIndexButton" mnemonicParsing="false" onAction="#step2ExportIndexClick" text="Εξαγωγη">
+                                 <tooltip>
+                                    <Tooltip text="Εξαγεται το δεντρο με τις ρυθμισεις που εχετε κανει σε αρχειο." />
+                                 </tooltip></Button>
+                              <Button mnemonicParsing="false" onAction="#step2ImportIndexClick" text="Εισαγωγη">
+                                 <tooltip>
+                                    <Tooltip text="Εισαγεται τις ρυθμισεις απο αρχειο στο οποιο τις εχετε εξαγει." />
+                                 </tooltip></Button>
+                              <Button mnemonicParsing="false" onAction="#step2CoverSettingsClick" text="Ρυθμιση Εξωφυλλου">
+                                 <tooltip>
+                                    <Tooltip text="Ανοιγει το παραθυρο για τη ρυθμιση του εξωφυλλου." />
+                                 </tooltip></Button>
                            </children>
                            <VBox.margin>
                               <Insets top="5.0" />
@@ -133,8 +166,14 @@
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" prefHeight="30.0" spacing="10.0">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#step2BackClick" text="&lt; Πισω" />
-                              <Button mnemonicParsing="false" onAction="#step2NextClick" text="Δημιουργια Ευρετηριου &gt;" />
+                              <Button mnemonicParsing="false" onAction="#step2BackClick" text="&lt; Πισω">
+                                 <tooltip>
+                                    <Tooltip text="Πισω στην επιλογη φακελου. Οι ρυθμισεις που εχετε κανει για την υπαρχουσα δομη θα χαθουν." />
+                                 </tooltip></Button>
+                              <Button mnemonicParsing="false" onAction="#step2NextClick" text="Δημιουργια Ευρετηριου &gt;">
+                                 <tooltip>
+                                    <Tooltip text="Δημιουργια του ευρετηριου με βαση τις ρυθμισεις που εχετε κανει για το εξωφυλλο και το ευρετηριο." />
+                                 </tooltip></Button>
                            </children>
                            <VBox.margin>
                               <Insets top="20.0" />
@@ -162,8 +201,14 @@
                         </Label>
                         <HBox alignment="CENTER_RIGHT" prefHeight="30.0" spacing="10.0">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#step3BackClick" text="&lt; Πισω" />
-                              <Button mnemonicParsing="false" onAction="#step3StopClick" text="Τελος" />
+                              <Button mnemonicParsing="false" onAction="#step3BackClick" text="&lt; Πισω">
+                                 <tooltip>
+                                    <Tooltip text="Πισω στην επεξεργασια του ευρετηριου." />
+                                 </tooltip></Button>
+                              <Button mnemonicParsing="false" onAction="#step3StopClick" text="Τελος">
+                                 <tooltip>
+                                    <Tooltip text="Κλεισιμο του προγραμματος. Οι ρυθμισεις που εχετε κανει και δεν εχετε εξαγει χανονται." />
+                                 </tooltip></Button>
                            </children>
                            <VBox.margin>
                               <Insets top="297.0" />
