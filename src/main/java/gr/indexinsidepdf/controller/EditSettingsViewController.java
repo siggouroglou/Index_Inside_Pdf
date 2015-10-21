@@ -1,5 +1,6 @@
 package gr.indexinsidepdf.controller;
 
+import gr.indexinsidepdf.lib.storage.Language;
 import gr.indexinsidepdf.lib.storage.SettingsManager;
 import java.io.File;
 import java.net.URL;
@@ -9,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
@@ -39,6 +41,8 @@ public class EditSettingsViewController implements Initializable {
     private RadioButton indexLocationOtherRadioButton;
     @FXML
     private TextField fileNameTextField;
+    @FXML
+    private ComboBox<Language> languageComboBox;
 
     /**
      * Initializes the controller class.
@@ -54,9 +58,16 @@ public class EditSettingsViewController implements Initializable {
         assert indexLocationInsideFolderRadioBtn != null : "fx:id=\"indexLocationInsideFolderRadioBtn\" was not injected: check your FXML file 'EditSettingsView.fxml'.";
         assert indexLocationOtherRadioButton != null : "fx:id=\"indexLocationOtherRadioButton\" was not injected: check your FXML file 'EditSettingsView.fxml'.";
         assert fileNameTextField != null : "fx:id=\"fileNameTextField\" was not injected: check your FXML file 'EditSettingsView.fxml'.";
+        assert languageComboBox != null : "fx:id=\"languageComboBox\" was not injected: check your FXML file 'EditSettingsView.fxml'.";
 
         // Binding.
         locationHbox.disableProperty().bind(Bindings.not(indexLocationOtherRadioButton.selectedProperty()));
+        
+        // ComboBox.
+        languageComboBox.getItems().clear();
+        languageComboBox.getItems().add(Language.ENGLISH);
+        languageComboBox.getItems().add(Language.GREEK);
+        languageComboBox.getSelectionModel().select(SettingsManager.getInstance().getLanguage());
         
         // Set the view.
         indexLocationInsideFolderRadioBtn.selectedProperty().set(SettingsManager.getInstance().isDefaultLocation());
@@ -92,6 +103,7 @@ public class EditSettingsViewController implements Initializable {
         SettingsManager.getInstance().setDefaultLocation(indexLocationInsideFolderRadioBtn.selectedProperty().get());
         SettingsManager.getInstance().setPdfFolderPath(locationTextField.textProperty().get());
         SettingsManager.getInstance().setFileName(fileNameTextField.textProperty().get());
+        SettingsManager.getInstance().setLanguage(languageComboBox.getSelectionModel().getSelectedItem());
         
         getStage().close();
     }

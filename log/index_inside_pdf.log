@@ -1,0 +1,12 @@
+21.10.2015 20:01:11,234 - INFO - gr.indexinsidepdf.MainApp.main # -----------------------------------------
+21.10.2015 20:01:11,237 - INFO - gr.indexinsidepdf.MainApp.main # The logger initialized successfully.
+21.10.2015 20:01:11,240 - INFO - gr.softaware.java_1_0.text.PropertiesUtilities.<init> # Property file loaded successfully.
+21.10.2015 20:17:17,289 - INFO - gr.indexinsidepdf.MainApp.main # -----------------------------------------
+21.10.2015 20:17:17,291 - INFO - gr.indexinsidepdf.MainApp.main # The logger initialized successfully.
+21.10.2015 20:17:17,294 - INFO - gr.softaware.java_1_0.text.PropertiesUtilities.<init> # Property file loaded successfully.
+21.10.2015 20:25:19,890 - INFO - gr.indexinsidepdf.MainApp.main # -----------------------------------------
+21.10.2015 20:25:19,892 - INFO - gr.indexinsidepdf.MainApp.main # The logger initialized successfully.
+21.10.2015 20:25:19,895 - INFO - gr.softaware.java_1_0.text.PropertiesUtilities.<init> # Property file loaded successfully.
+21.10.2015 20:29:44,995 - INFO - gr.indexinsidepdf.MainApp.main # -----------------------------------------
+21.10.2015 20:29:44,997 - INFO - gr.indexinsidepdf.MainApp.main # The logger initialized successfully.
+21.10.2015 20:29:45,000 - INFO - gr.softaware.java_1_0.text.PropertiesUtilities.<init> # Property file loaded successfully.

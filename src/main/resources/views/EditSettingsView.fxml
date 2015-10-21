@@ -60,6 +60,15 @@
                         <TextField fx:id="fileNameTextField" />
                      </children>
                   </VBox>
+                  <VBox>
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                     <children>
+                        <Label text="Γλωσσα Εγγραφου" />
+                        <ComboBox fx:id="languageComboBox" />
+                     </children>
+                  </VBox>
                </children>
             </VBox>
          </center>

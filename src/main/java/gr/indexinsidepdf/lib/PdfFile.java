@@ -28,6 +28,7 @@ import gr.softaware.java_1_0.data.sequence.RomanLowerCountSequence;
 import gr.softaware.java_1_0.data.structure.tree.basic.BasicTree;
 import gr.softaware.java_1_0.data.structure.tree.basic.BasicTreeNode;
 import gr.softaware.java_1_0.data.types.FileType;
+import gr.softaware.java_1_0.text.PropertiesUtilities;
 import gr.softaware.java_1_0.text.TextStyleFormat;
 import gr.softaware.java_1_0.text.TextStyleOutput;
 import gr.softaware.javafx_1_0.controls.dialog.DialogHelper;
@@ -203,6 +204,10 @@ public class PdfFile extends SoftawarePdfDocument {
                 //=> State create cover.
                 updateProgressLabel("Κατασκευή εξώφυλλου..");
 
+                // Cover settings prefix.
+                String coverProp = "cover." + SettingsManager.getInstance().getLanguage() + ".";
+                String and = PropertiesUtilities.getInstance().getString(coverProp + "and");
+
                 // One paragraph for the whole page.
                 Paragraph coverParagraph = new Paragraph();
                 coverParagraph.setAlignment(Element.ALIGN_CENTER);
@@ -233,76 +238,83 @@ public class PdfFile extends SoftawarePdfDocument {
 
                 // dated <date>
                 if (!coverModel.getStartDate().isEmpty()) {
-                    coverParagraph.add(new Chunk("dated ", normalFont));
+                    String date = PropertiesUtilities.getInstance().getString(coverProp + "date");
+                    coverParagraph.add(new Chunk(date + " ", normalFont));
                     coverParagraph.add(new Chunk(coverModel.getStartDate(), boldFont));
                     coverParagraph.add(NEWLINE[1]);
                 }
 
                 // for an ammount of 
                 if (!coverModel.getStartAmmount().isEmpty()) {
-                    coverParagraph.add(new Chunk("for an ammount of ", normalFont));
+                    String amount = PropertiesUtilities.getInstance().getString(coverProp + "amount");
+                    coverParagraph.add(new Chunk(amount + " ", normalFont));
                     coverParagraph.add(new Chunk(coverModel.getStartAmmount(), boldFont));
                     coverParagraph.add(NEWLINE[1]);
                 }
 
                 // between list
                 if (!coverModel.getBetweenList().isEmpty()) {
+                    final String between = PropertiesUtilities.getInstance().getString(coverProp + "between");
+                    String borrower = PropertiesUtilities.getInstance().getString(coverProp + "borrower");
+                    String borrowers = PropertiesUtilities.getInstance().getString(coverProp + "borrowers");
                     coverParagraph.add(NEWLINE[2]);
                     // Add the static containt.
-                    coverParagraph.add(new Chunk("between", normalFont));
+                    coverParagraph.add(new Chunk(between, normalFont));
                     coverParagraph.add(NEWLINE[2]);
                     // Check the count of the between. Different format in case of one or more items.
                     if (coverModel.getBetweenList().size() == 1) {
                         coverParagraph.add(new Chunk(coverModel.getBetweenList().get(0), boldFont));
                         coverParagraph.add(NEWLINE[1]);
-                        coverParagraph.add(new Chunk("(the “Borrower”)", normalFont));
+                        coverParagraph.add(new Chunk(borrower, normalFont));
                     } else {
                         // Create the roman sequence.
                         CountSequence betweenSequence = new RomanLowerCountSequence();
                         // Create a counter to not add the "and" word to the final item.
                         IntegerMutable counter = new IntegerMutable(0);
                         // Add the between items.
-                        coverModel.getBetweenList().stream().forEach((between) -> {
+                        coverModel.getBetweenList().stream().forEach((betweenItem) -> {
                             counter.set(counter.intValue() + 1);
-                            coverParagraph.add(new Chunk(between, boldFont));
+                            coverParagraph.add(new Chunk(betweenItem, boldFont));
                             coverParagraph.add(new Chunk(" (" + betweenSequence.nextValue() + ")", normalFont));
                             if (counter.intValue() < coverModel.getBetweenList().size()) {
-                                coverParagraph.add(new Chunk(" and", normalFont));
+                                coverParagraph.add(new Chunk(" " + and, normalFont));
                             }
                             coverParagraph.add(NEWLINE[1]);
                         });
-                        coverParagraph.add(new Chunk("(together the “Borrowers”)", normalFont));
+                        coverParagraph.add(new Chunk(borrowers, normalFont));
                     }
                     coverParagraph.add(NEWLINE[1]);
                 }
 
                 // lender list
                 if (!coverModel.getLenderList().isEmpty()) {
+                    String lender = PropertiesUtilities.getInstance().getString(coverProp + "lender");
+                    String lenders = PropertiesUtilities.getInstance().getString(coverProp + "lenders");
                     // Add the static containt.
                     coverParagraph.add(NEWLINE[1]);
-                    coverParagraph.add(new Chunk("and", normalFont));
+                    coverParagraph.add(new Chunk(and, normalFont));
                     coverParagraph.add(NEWLINE[2]);
                     // Check the count of the lender. Different format in case of one or more items.
                     if (coverModel.getLenderList().size() == 1) {
                         coverParagraph.add(new Chunk(coverModel.getLenderList().get(0), boldFont));
                         coverParagraph.add(NEWLINE[1]);
-                        coverParagraph.add(new Chunk("(the “Lender”)", normalFont));
+                        coverParagraph.add(new Chunk(lender, normalFont));
                     } else {
                         // Create the roman sequence.
                         CountSequence lenderSequence = new RomanLowerCountSequence();
                         // Create a counter to not add the "and" word to the final item.
                         IntegerMutable counter = new IntegerMutable(0);
                         // Add the lender items.
-                        coverModel.getLenderList().stream().forEach((lender) -> {
+                        coverModel.getLenderList().stream().forEach((lenderItem) -> {
                             counter.set(counter.intValue() + 1);
-                            coverParagraph.add(new Chunk(lender, boldFont));
+                            coverParagraph.add(new Chunk(lenderItem, boldFont));
                             coverParagraph.add(new Chunk(" (" + lenderSequence.nextValue() + ")", normalFont));
                             if (counter.intValue() < coverModel.getLenderList().size()) {
-                                coverParagraph.add(new Chunk(" and", normalFont));
+                                coverParagraph.add(new Chunk(" " + and, normalFont));
                             }
                             coverParagraph.add(NEWLINE[1]);
                         });
-                        coverParagraph.add(new Chunk("(together the “Lenders”)", normalFont));
+                        coverParagraph.add(new Chunk(lenders, normalFont));
                     }
                     coverParagraph.add(NEWLINE[1]);
                 }
@@ -352,11 +364,15 @@ public class PdfFile extends SoftawarePdfDocument {
                 //=> State create cover.
                 updateProgressLabel("Κατασκευή ευρετηρίου..");
 
+                // Cover settings prefix.
+                String coverProp = "cover." + SettingsManager.getInstance().getLanguage() + ".";
+                String index = PropertiesUtilities.getInstance().getString(coverProp + "index");
+
                 // Add the index title.
                 Font titleFont = new Font(arialBaseFont, 25, Font.NORMAL, new BaseColor(23, 54, 93));
                 final Paragraph titleParagraph = new Paragraph();
                 titleParagraph.setAlignment(Element.ALIGN_LEFT);
-                titleParagraph.add(new Chunk("Index", titleFont));
+                titleParagraph.add(new Chunk(index, titleFont));
 
                 // Add the index text on the top.
                 Font separatorFont = new Font(arialBaseFont, 20, Font.NORMAL, new BaseColor(79, 129, 189));

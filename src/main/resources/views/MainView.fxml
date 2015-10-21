@@ -42,7 +42,7 @@
             </MenuBar>
             <HBox alignment="CENTER_RIGHT" prefHeight="30.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#closeBtnClick" text="Κλεισιμο">
+                  <Button mnemonicParsing="false" onAction="#closeBtnClick" text="Κλεισιμο" wrapText="true">
                      <tooltip>
                         <Tooltip text="Κλεισιμο του προγραμματος. Οι ρυθμισεις που εχετε κανει και δεν εχετε εξαγει χανονται." />
                      </tooltip></Button>
@@ -93,7 +93,7 @@
                            <children>
                               <Button fx:id="step1NextButton" mnemonicParsing="false" onAction="#step1NextClick" text="Επομενο &gt;">
                                  <tooltip>
-                                    <Tooltip text="Κατασκευη και προβολη της δομης των φακελων και των αρχειων pdf για τη διαδρομη που επιλεξατε." />
+                                    <Tooltip text="Κατασκευη και προβολη της δομης των φακελων και των αρχειων pdf για τη διαδρομη που επιλεξατε." wrapText="true" />
                                  </tooltip></Button>
                            </children>
                            <VBox.margin>
@@ -123,11 +123,11 @@
                                  <children>
                                     <Button mnemonicParsing="false" onAction="#step2UpClick" prefWidth="115.0" text="Πανω">
                                        <tooltip>
-                                          <Tooltip text="Επιλεξτε ενα κομβο και κανοντας κλικ σε αυτο το κουμπι μπορειτε να του αλλαξετε θεση προς τα επανω." />
+                                          <Tooltip text="Επιλεξτε ενα κομβο και κανοντας κλικ σε αυτο το κουμπι μπορειτε να του αλλαξετε θεση προς τα επανω." wrapText="true" />
                                        </tooltip></Button>
                                     <Button mnemonicParsing="false" onAction="#step2DownClick" prefWidth="115.0" text="Κατω">
                                        <tooltip>
-                                          <Tooltip text="Επιλεξτε ενα κομβο και κανοντας κλικ σε αυτο το κουμπι μπορειτε να του αλλαξετε θεση προς τα κατω." />
+                                          <Tooltip text="Επιλεξτε ενα κομβο και κανοντας κλικ σε αυτο το κουμπι μπορειτε να του αλλαξετε θεση προς τα κατω." wrapText="true" />
                                        </tooltip></Button>
                                     <Button mnemonicParsing="false" onAction="#step2RenameClick" prefWidth="115.0" text="Μετονομασια">
                                        <tooltip>

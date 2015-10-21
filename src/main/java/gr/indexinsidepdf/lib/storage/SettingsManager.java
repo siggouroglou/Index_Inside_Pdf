@@ -48,4 +48,12 @@ public class SettingsManager {
         this.settingsModel.setFileName(fileName);
     }
 
+    public Language getLanguage() {
+        return this.settingsModel.getLanguage();
+    }
+
+    public void setLanguage(Language language) {
+        this.settingsModel.setLanguage(language);
+    }
+
 }
